@@ -1,32 +1,32 @@
 import adventureRequest from "../utils/adventureRequest";
 
-export const adventureSignup = (data)=>{
+export const adventureSignup = (data) => {
     console.log(data);
-    return adventureRequest.post('/adventureAuth/signup',data,{
-        withCredentials:true
+    return adventureRequest.post('/adventureAuth/signup', data, {
+        withCredentials: true
     })
 }
 
-export async function adventureLogin(value){
+export async function adventureLogin(value) {
     try {
-        const data = await adventureRequest.post('/adventureAuth/login',{...value})
+        const data = await adventureRequest.post('/adventureAuth/login', { ...value })
         return data
     } catch (error) {
         return error
     }
-    
+
 }
 
-export const AdventureSignupWithGoogle = (data)=>{
-    return adventureRequest.post('/adventureAuth/googlesignup',data,{
-        withCredentials : true
+export const AdventureSignupWithGoogle = (data) => {
+    return adventureRequest.post('/adventureAuth/googlesignup', data, {
+        withCredentials: true
     })
 }
 
-export async function editProfile(data,id){
+export async function editProfile(data, id) {
     try {
-        const response = await adventureRequest.put(`/editProfile/${id}`,data,{
-            withCredentials : true
+        const response = await adventureRequest.put(`/editProfile/${id}`, data, {
+            withCredentials: true
         })
         return response
     } catch (error) {
@@ -38,30 +38,30 @@ export async function editProfile(data,id){
 export async function ProfileImage(id, img) {
     console.log("adaadadada", img);
     try {
-       
-      const formData = new FormData();
-      formData.append("image", img);
-      formData.append("advId", id);
-      const config = {
-        header: {
-          "content-type": "multipart/form-data",
-          userId: id,
-        },
-        withCredentials: true,
-      };
-      
-      const res = await adventureRequest.post("/imageEdit", formData, config);
-      return res;
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
-  export const setSlot = (data)=>{
+        const formData = new FormData();
+        formData.append("image", img);
+        formData.append("advId", id);
+        const config = {
+            header: {
+                "content-type": "multipart/form-data",
+                userId: id,
+            },
+            withCredentials: true,
+        };
+
+        const res = await adventureRequest.post("/imageEdit", formData, config);
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const setSlot = (data) => {
     try {
-        console.log(data,'data is found here');
-        const response = adventureRequest.post('/addSlots',data,{
-            withCredentials : true
+        console.log(data, 'data is found here');
+        const response = adventureRequest.post('/addSlots', data, {
+            withCredentials: true
         })
         return response
     } catch (error) {
@@ -69,26 +69,47 @@ export async function ProfileImage(id, img) {
     }
 }
 
-export async function addCategory(value){
+export async function addCategory(value) {
     try {
-       
-        const data = await adventureRequest.post('/addCategory',value,{
-        WithCreadentials: true,
+        console.log(value, 'uuuuuuuuuuuuuuuuuu');
+        const data = await adventureRequest.post('/addCategory', value, {
+            WithCredentials: true,
             header: {
-              "content-type": "multipart/form-data",
+                "content-type": "multipart/form-data",
             },
-          
-         } )
+
+        })
         return data
     } catch (error) {
         return error
     }
 }
 
-export async function manageCategory(id){
+export async function manageCategory(id) {
     return adventureRequest.put(`/manageCategory/${id}`)
 }
 
-export async function manageCategoryList(id){
+export async function manageCategoryList(id) {
     return adventureRequest.put(`/manageCategoryList/${id}`)
+}
+
+export async function slotDelete(id, slotId) {
+    console.log(id, slotId, 'api id is here');
+    return adventureRequest.delete(`/slotdelete/${id}/${slotId}`);
+}
+
+
+export async function editCategory(data) {
+    try {
+        console.log('lplplplplplplplpplp', data);
+        const response = await adventureRequest.post('/editCategory', data, {
+            withCredentials: true,
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+        return response
+    } catch (error) {
+        return error
+    }
 }

@@ -23,7 +23,7 @@ import adminRequest from "../../utils/adminRequest";
 import { manageUsers } from "../../api/adminApi";
  
  
-const TABLE_HEAD = ["Name", "Status", "Date", "Actions"];
+const TABLE_HEAD = ["Name", "Status", "Actions"];
 
 export function Users() {
   
@@ -109,6 +109,7 @@ export function Users() {
             </tr>
           </thead>
           <tbody>
+            
             {data.data.map(
               ({ displaypicture, name, email, verified ,is_blocked, joinDate, _id ,image}, index) => {
                 const isLast = index === data.data - 1;
@@ -150,15 +151,6 @@ export function Users() {
                          </div>
                     </td>
                     
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {joinDate}
-                      </Typography>
-                    </td>
                     {is_blocked === false ? (
                       <td className={classes}>
                       <Tooltip content="Block User">

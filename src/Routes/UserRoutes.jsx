@@ -12,6 +12,8 @@ import SingleAdv from '../components/User/SingleAdv'
 import Booking from '../components/User/Booking'
 import Success from '../components/User/Success'
 import BookingDetails from '../components/User/BookingDetails'
+import ChatList from '../components/User/Chat/ChatList'
+import WalletHistory from '../components/User/WalletHistory'
 
 function UserRoutes() {
   return (
@@ -32,6 +34,9 @@ function UserRoutes() {
                 <Route path='/userBooking' element={<Booking/>}/>
                 <Route path='/success' element={<Success/>}/>
                 <Route path='/bookingDetails' element={<BookingDetails/>}/>
+                <Route path='/chats' element={<ChatList/>}/>
+                <Route path='/wallet' element={<WalletHistory/>}/>
+
 
             </Route>
           </Route>

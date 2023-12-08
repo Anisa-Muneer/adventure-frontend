@@ -37,6 +37,7 @@ function ProfileMenu() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { adventureInfo } = useSelector(state => state.adventure)
+  console.log(adventureInfo,'adventureInfo is here');
   const id = adventureInfo.id
   const handleLogout = () => {
     localStorage.removeItem("currentAdventure")

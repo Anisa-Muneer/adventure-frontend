@@ -132,6 +132,7 @@ export function AddSlot() {
                             >
                                 category
                             </Typography>
+                            
                             <select
                                 name="category"
                                 value={values.category}

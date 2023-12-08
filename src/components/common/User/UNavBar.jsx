@@ -40,6 +40,7 @@ const profileMenuItems = [
 
 function ProfileMenu() {
     const { userInfo } = useSelector(state => state.user)
+    console.log(userInfo,'userInfo is here');
     const id = userInfo.id
     const navigate = useNavigate()
     const handleLogout = () => {
@@ -265,7 +266,7 @@ function UNavBar() {
                     </IconButton>
                     <div className="text-gray-600">
 
-                        <BsChatLeftFill />
+                        <BsChatLeftFill onClick={()=>navigate('/chats')}/>
                     </div>
 
                     <ProfileMenu />

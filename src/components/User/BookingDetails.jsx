@@ -2,6 +2,7 @@ import { Button, Card, Chip, Spinner, Typography } from '@material-tailwind/reac
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import userRequest from '../../utils/userRequest'
+import CancelBooking from './CancelBooking'
 
 function BookingDetails() {
 
@@ -36,32 +37,38 @@ function BookingDetails() {
                             >
                                 <img
                                     size="lg"
-                                  src={booking.adventureId.image}
+                                  src={booking.image}
                                     className="h-16 w-16 md:h-28 md:w-28 rounded-full"
                                 />
                             </div>
                         </div>
                         <div className=" ">
                             <Typography variant="h3" className="my-2">
-                                team {booking.adventureId.name}
+                             {booking.adventureId.name}
                             </Typography>
                             <Typography variant="h6" className="my-2">
                                 location @ {booking.adventureId.location}
                             </Typography>
                             <div className="flex my-2">
                                 <Typography>
-                                    
+                                    {booking.categoryName}
+                                </Typography>
+                            </div>
+                            <div className="flex my-2">
+                                <Typography>
+                                    {booking.entryFee}
+                                </Typography>
+                            </div>
+                             <div className="flex flex-row my-2">
+                                <Typography>
+                                    {new Date(booking.scheduledAt?.slotDate).toLocaleDateString('en-GB')} @
+                                </Typography>
+                                <Typography>
+                                    {booking.scheduledAt?.slotTime}
                                 </Typography>
                             </div>
                         </div>
-                        <div className="flex-col ">
-                           <Button>
-                            Cancel
-                           </Button>
-                              
-                        
-                           
-                        </div>
+                       <CancelBooking id={booking._id} isCompleted={booking.status}/>
                     </div>
                 </Card>
             ))}

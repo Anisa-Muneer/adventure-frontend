@@ -39,11 +39,11 @@ import { useNavigate } from "react-router-dom";
             </ListItemPrefix>
             User List
           </ListItem>
-          <ListItem onClick={()=>navigate('/admin/adminCategory')}>
+          <ListItem onClick={()=>navigate('/admin/booking')}>
             <ListItemPrefix >
               <InboxIcon className="h-5 w-5" />
             </ListItemPrefix>
-            Category
+            Booking
             
           </ListItem>
           <ListItem onClick={()=>navigate('/admin/adventures')}>

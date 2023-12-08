@@ -21,10 +21,11 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { manageCategory, manageCategoryList } from "../../api/adventureApi";
 import AddCategory from "./AddCategory";
 import adventureRequest from "../../utils/adventureRequest";
+import EditCategory from "./EditCategory";
 
 
 
-const TABLE_HEAD = ["Name", "Entry Fee", "Status", "Action"];
+const TABLE_HEAD = ["Name", "Description", "Entry Fee", "Status", "Action",""];
 export function Category() {
     const queryClient = useQueryClient()
     const { isLoading, error, data, refetch } = useQuery({
@@ -109,24 +110,24 @@ console.log(data,"cat data");
                     </thead>
                     <tbody>
                         {data.data.category.map(
-                            ({image, categoryName, entryFee, status, _id }, index) => {
+                            (cat, index) => {
                                 const isLast = index === data.data.length - 1;
                                 const classes = isLast
                                     ? "p-4"
                                     : "p-4 border-b border-blue-gray-50";
 
                                 return (
-                                    <tr key={_id}>
+                                    <tr key={cat._id}>
                                         <td className={classes}>
                                             <div className="flex items-center gap-3">
-                                                <Avatar  src={image} />
+                                                <Avatar  src={cat.image} />
                                                 <div className="flex flex-col">
                                                     <Typography
                                                         variant="small"
                                                         color="blue-gray"
                                                         className="font-normal"
                                                     >
-                                                        {categoryName}
+                                                        {cat.categoryName}
                                                     </Typography>
                                                     <Typography
                                                         variant="small"
@@ -138,6 +139,24 @@ console.log(data,"cat data");
                                                 </div>
                                             </div>
                                         </td>
+                                         <td className={classes}>
+                                            <div className="flex flex-col">
+                                                <Typography
+                                                    variant="small"
+                                                    color="blue-gray"
+                                                    className="font-normal"
+                                                >
+                                                    {cat.catDescription}
+                                                </Typography>
+                                                <Typography
+                                                    variant="small"
+                                                    color="blue-gray"
+                                                    className="font-normal opacity-70"
+                                                >
+
+                                                </Typography>
+                                            </div>
+                                        </td>
                                         <td className={classes}>
                                             <div className="flex flex-col">
                                                 <Typography
@@ -145,7 +164,7 @@ console.log(data,"cat data");
                                                     color="blue-gray"
                                                     className="font-normal"
                                                 >
-                                                    {entryFee}
+                                                    {cat.entryFee}
                                                 </Typography>
                                                 <Typography
                                                     variant="small"
@@ -161,16 +180,16 @@ console.log(data,"cat data");
                                                 <Chip
                                                     variant="ghost"
                                                     size="sm"
-                                                    value={status === false ? "deleted" : "active"}
-                                                    color={status === false ? "red" : "green"}
+                                                    value={cat.status === false ? "deleted" : "active"}
+                                                    color={cat.status === false ? "red" : "green"}
                                                 />
                                             </div>
                                         </td>
                                         <>
-                                            {status === true ? (
+                                            {cat.status === true ? (
                                                 <td className={classes}>
                                                     <Tooltip content="Delete Department">
-                                                        <Button size="sm" color="red" className="rounded-md flex gap-3" variant="outlined" onClick={() => handleAction(_id)}>
+                                                        <Button size="sm" color="red" className="rounded-md flex gap-3" variant="outlined" onClick={() => handleAction(cat._id)}>
                                                             <NoSymbolIcon strokeWidth={1.5} stroke="currentColor" className="h-4 w-4" />
                                                             Unlist
                                                         </Button>
@@ -181,7 +200,7 @@ console.log(data,"cat data");
 
                                                 <td className={classes}>
                                                     {/* <Tooltip content="Undo Delete"> */}
-                                                    <Button size="sm" color="green" className="rounded-md flex gap-2" variant="outlined" onClick={() => handleActionList(_id)}>
+                                                    <Button size="sm" color="green" className="rounded-md flex gap-2" variant="outlined" onClick={() => handleActionList(cat._id)}>
                                                         <ArrowPathIcon strokeWidth={1.5} stroke="currentColor" className="h-4 w-4" />
 
                                                         List
@@ -189,7 +208,11 @@ console.log(data,"cat data");
                                                     {/* </Tooltip> */}
                                                 </td>
                                             )}
+
                                         </>
+                                        <td>
+                                            <EditCategory category={cat}/>
+                                        </td>
                                     </tr>
                                 );
                             },

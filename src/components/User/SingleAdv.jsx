@@ -1,12 +1,100 @@
-import { BookmarkIcon, BriefcaseIcon, DocumentPlusIcon, EnvelopeIcon, MapPinIcon, StarIcon, WalletIcon } from "@heroicons/react/24/solid"
-import { Badge, Button, Card, Rating, Spinner, Typography } from "@material-tailwind/react"
+import { EnvelopeIcon, StarIcon, } from "@heroicons/react/24/solid"
+import { Card, Spinner, Typography } from "@material-tailwind/react"
 import { useQuery } from "@tanstack/react-query"
 import { ToastContainer } from "react-toastify"
 import userRequest from "../../utils/userRequest"
 import { useLocation } from "react-router-dom"
+import Reviews from "./Reviews"
+
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { IconButton, ImageList, ImageListItem, ImageListItemBar, ListSubheader } from '@mui/material';
+import { InfoIcon } from '@chakra-ui/icons';
+import { Button } from '@material-tailwind/react';
 
 
 function SingleAdv() {
+
+  const itemData = [
+  {
+    img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
+    title: 'Breakfast',
+    author: '@bkristastucchio',
+    rows: 2,
+    cols: 3,
+    featured: true,
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d',
+    title: 'Burger',
+    author: '@rollelflex_graphy726',
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
+    title: 'Camera',
+    author: '@helloimnik',
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c',
+    title: 'Coffee',
+    author: '@nolanissac',
+    cols: 2,
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1533827432537-70133748f5c8',
+    title: 'Hats',
+    author: '@hjrc33',
+    cols: 2,
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62',
+    title: 'Honey',
+    author: '@arwinneil',
+    rows: 2,
+    cols: 2,
+    featured: true,
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1516802273409-68526ee1bdd6',
+    title: 'Basketball',
+    author: '@tjdragotta',
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1518756131217-31eb79b20e8f',
+    title: 'Fern',
+    author: '@katie_wasserman',
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1597645587822-e99fa5d45d25',
+    title: 'Mushrooms',
+    author: '@silverdalex',
+    rows: 2,
+    cols: 2,
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1567306301408-9b74779a11af',
+    title: 'Tomato basil',
+    author: '@shelleypauls',
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1471357674240-e1a485acb3e1',
+    title: 'Sea star',
+    author: '@peterlaster',
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1589118949245-7d38baf380d6',
+    title: 'Bike',
+    author: '@southside_customs',
+    cols: 2,
+  },
+];
+
+const theme = createTheme({
+  typography: {
+    fontFamily: 'Arial, sans-serif', // Change this to the desired font family
+  },
+});
+
+
   const location = useLocation()
   const id = location.state._id
   const { isLoading, error, data } = useQuery({
@@ -66,107 +154,53 @@ function SingleAdv() {
             }
 
           </aside>
-          <div className="p-4 pb-0 ps-0 grid grid-rows">
-            <Card className=" shadow-2xl mt-14 p-5 h-auto">
+          <div className="shadow-2xl mt-14 h-[470px]">
+            <div className="flex justify-end mx-20">
+           <Typography
+             variant="h4"
+             
+            >
+              Posts
+            </Typography>
+            </div>
 
-              <Card className=" h-auto">
-                {data.data.category.map((item, index) => (
+            <div className="flex justify-center">    
+ <ThemeProvider theme={theme}>
+      <ImageList sx={{ width: 800, height: 390 }}>
+      {/* <ImageListItem key="Subheader" cols={3}>
+        <ListSubheader component="div">December</ListSubheader>
+      </ImageListItem> */}
+      {itemData.map((item) => (
+        <ImageListItem key={item.img}>
+          <img
+            srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
+            src={`${item.img}?w=248&fit=crop&auto=format`}
+            alt={item.title}
+            loading="lazy"
+          />
+          <ImageListItemBar
+            title={item.title}
+            subtitle={item.author}
+            actionIcon={
+              <IconButton
+                sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+                aria-label={`info about ${item.title}`}
+              >
+                <InfoIcon />
+              </IconButton>
+            }
+          />
+        </ImageListItem>
+      ))}
+    </ImageList>
+   </ThemeProvider>
+   </div>
 
-
-                  <Card className="h-40 m-3 py-2 bg-blue-gray-50" key={index}>
-
-
-                    <div className="flex justify-between" >
-                      <img
-
-                        alt=""
-                        className="rounded-lg lg:w-32 lg:h-32 w-36 h-36 m-2"
-                      />
-                      <div className="ps-8 h-full">
-                        <Typography
-                          variant="h4"
-                          color="blue-gray"
-                          size="xl"
-                          className="pt-3  font-serif"
-                        >
-                          {data.data.name}
-
-                        </Typography>
-
-
-
-                        <Typography
-                          variant="h6"
-                          color="blue-gray"
-                          size="xl"
-                          className="font-serif"
-                        >
-                          {item.categoryName}
-                        </Typography>
-
-
-
-                        <div className='flex flex-row'>
-
-
-                          <Typography
-                            color="blue-gray"
-                            size="xl"
-                            className="text-sm font-normal pb-2 flex items-center"
-                          >
-                            <MapPinIcon className="h-4 w-4" />2H
-
-                          </Typography>
-                          <Typography
-                            color="blue-gray"
-                            size="xl"
-                            className="text-sm font-normal pb-2 mx-3 flex items-center"
-                          >
-                            <MapPinIcon className="h-4 w-4" />{data.data.location}
-
-                          </Typography>
-
-                        </div>
-
-
-                      </div>
-                      <div className="h-full ps-24 flex items-center  border-e-2">
-
-                      </div>
-                      <div className="w-72 h-full flex flex-col justify-center items-center">
-
-                        <Button className="flex items-center bg-green-600 gap-1">
-                          <BookmarkIcon className="h-5 text-white" />Save
-
-                        </Button>
-
-                        <Typography
-                          variant="h5"
-                          color="blue-gray"
-                          className="font-normal mt-1"
-                        >
-                          INR {item.entryFee}
-                        </Typography>
-
-
-                        <Button className="flex items-center bg-green-600 gap-1 my-2">
-                          <BookmarkIcon className="h-5 text-white" />Book Now
-                        </Button>
-
-
-
-                      </div>
-                    </div>
-
-
-                  </Card>
-
-                ))}
-
-
-              </Card>
-            </Card>
           </div>
+        </div>
+        <div className="pt-10">
+
+            <Reviews id={data.data._id}/>
         </div>
 
       </div>

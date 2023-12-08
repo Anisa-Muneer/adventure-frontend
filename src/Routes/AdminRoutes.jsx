@@ -9,6 +9,7 @@ import { Adventures } from '../components/Admin/Adventures'
 import { Users } from '../components/Admin/Users'
 import Notification from '../components/Admin/Notification'
 import Verification from '../components/Admin/Verification'
+import {Booking} from '../components/Admin/Booking'
 
 
 
@@ -28,6 +29,7 @@ export default function AdminRoutes() {
               <Route path='/users' element={<Users/>} />
               <Route path='/notification' element={ <Notification/> }/>
               <Route path='/verification' element={ <Verification/> }/>
+              <Route path='/booking' element={ <Booking/> }/>
            
              
 

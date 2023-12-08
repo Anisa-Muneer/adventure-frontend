@@ -3,6 +3,8 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import UserRoutes from './Routes/UserRoutes'
 import AdventureRoutes from './Routes/AdventureRoutes'
 import AdminRoutes from './Routes/AdminRoutes'
+import ChatUserProvider from './components/User/Chat/components/Context/ChatProvider'
+import ChatProvider from './components/Adventure/Chat/components/Context/ChatProvider'
 
 function App() {
   return (
@@ -10,8 +12,8 @@ function App() {
     <div>
       <BrowserRouter>
           <Routes>
-            <Route path='/*' element = {<UserRoutes/>} />
-            <Route path='/adventure/*' element = {<AdventureRoutes/> }/>
+            <Route path='/*' element = {<ChatUserProvider>  <UserRoutes/> </ChatUserProvider>} />
+            <Route path='/adventure/*' element = {<ChatProvider><AdventureRoutes/></ChatProvider>  }/>
             <Route path='/admin/*' element={ <AdminRoutes/> }/>
           </Routes>
 

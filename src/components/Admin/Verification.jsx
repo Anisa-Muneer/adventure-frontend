@@ -14,13 +14,13 @@ import { useQuery } from '@tanstack/react-query';
 import adminRequest from '../../utils/adminRequest';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { verifyAdventure } from '../../api/adminApi';
+import Reject from './Reject';
 
 function Verification() {
     const location = useLocation()
     const id = location.state._id
     const navigate = useNavigate()
     const [open,setOpen] = useState(false)
-    
     const handleOpen = () => setOpen(!open)
 
     const { isLoading, error, data } = useQuery({
@@ -103,7 +103,7 @@ function Verification() {
                             <div className='flex justify-end'>
                                 {/* <Button onClick={()=>handleOpen(!open)} variant="text" color="red" className="mr-1"><span>Cancel</span></Button> */}
                                 <Button variant="filled" className="rounded-none text-xs hover:bg-green-800 text-white me-4 bg-green-600" onClick={()=>handleVerify(data.data._id)}>approve</Button>
-
+                                <Reject id={data.data._id} />
 
                             </div>
                         </div>

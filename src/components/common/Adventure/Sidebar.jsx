@@ -54,17 +54,17 @@ import { useNavigate } from "react-router-dom";
             </ListItemPrefix>
             Category
           </ListItem>
-          <ListItem>
+          <ListItem  onClick={()=>navigate('/adventure/chats')}>
             <ListItemPrefix>
               <Cog6ToothIcon className="h-5 w-5" />
             </ListItemPrefix>
-            Settings
+            Chats
           </ListItem>
-          <ListItem>
+          <ListItem onClick={()=>navigate('/adventure/posts')}>
             <ListItemPrefix>
               <PowerIcon className="h-5 w-5" />
             </ListItemPrefix>
-            Log Out
+            Posts
           </ListItem>
         </List>
       </Card>

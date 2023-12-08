@@ -21,13 +21,15 @@ const navigate = useNavigate()
         queryKey: ['userprofile'],
         queryFn: ()=>userRequest.get(`/profile`).then((res)=>res.data)
       })
-    console.log(data);
+    console.log(data,'profile data is here');
     if (isLoading) {
         return <div className="h-screen flex justify-center items-center"><Spinner color="blue" className="h-10 w-10 " /></div>
       }
       if (error) {
         return <h1>Something went wrong</h1>
       }
+
+    
 
   return (
     <div className="">
@@ -57,9 +59,10 @@ const navigate = useNavigate()
               </p>
               
               <div className="flex flex-row justify-evenly pt-3">
-                <button className="flex flex-row rounded-lg bg-gradient-to-br from-[#FF416C] to-[#FF4B2B] ps-2 px-5 py-1 text-base font-medium text-white transition duration-200 hover:shadow-lg hover:shadow-[#FF416C]/50">
+                <button className="flex flex-row rounded-lg bg-gradient-to-br from-[#FF416C] to-[#FF4B2B] ps-2 px-5 py-1 text-base font-medium text-white transition duration-200 hover:shadow-lg hover:shadow-[#FF416C]/50"
+                onClick={() => navigate('/wallet', { state: data.data.wallet })}>
                   <WalletIcon className="w-6 me-2" />
-                  Wallet
+                  Wallet 
                 </button>
                 <button className="flex flex-row rounded-lg border-2 border-green-500 px-5 py-1 text-base font-medium text-green-500 transition duration-200 hover:bg-green-100 active:bg-green-700/5 dark:border-green-400 dark:bg-green-400/10 dark:text-white dark:hover:bg-green-300/10 dark:active:bg-green-200/10">
                   <EnvelopeIcon className="w-6 me-2" />

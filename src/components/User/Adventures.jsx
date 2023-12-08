@@ -73,19 +73,17 @@ function Adventures() {
             <div className="grid grid-cols-[20rem,1fr] h-screen m-3">
 
                 <div>
-                    <Card className="h-auto m-3 bg-blue-gray-50">
-                        <Radio
-
-                            name="rating"
-                            label="Trekking"
+                   <Card className="h-auto m-3 bg-blue-gray-50">
+                       {Array.from(new Set(data.data.map(cat => cat.category.categoryName))).map((uniqueCategory, indx) => (
+  
+                        <Radio key={indx}
+                          name="trekking"
+                          label={uniqueCategory}
                         />
-                        <Radio
-                            name="rating"
-                            label="Hiking"
-                        />
+                        ))}
                     </Card>
 
-                        <Card className="h-auto m-3 bg-blue-gray-50" >
+                        {/* <Card className="h-auto m-3 bg-blue-gray-50" >
                     {data.data.map((loc, ind) => (
                             <Radio key={ind}
                                 // value={filter}
@@ -96,6 +94,15 @@ function Adventures() {
                             />
 
                             ))}
+                        </Card> */}
+
+                        <Card className="h-auto m-3 bg-blue-gray-50">
+                           {Array.from(new Set(data.data.map(loc => loc.location))).map((uniqueLocation, ind) => (
+                              <Radio key={ind}
+                                name="rating"
+                                label={uniqueLocation}
+                               />
+                            ))}
                         </Card>
 
                 </div>
@@ -103,6 +110,7 @@ function Adventures() {
 
                 <div className="max-h-screen overflow-y-scroll no-scrollbar">
                     <Card className=" h-auto">
+                        
                         {data.data.map((adventure) => (
                                 <CardBody className="h-40 m-3 py-2 bg-blue-gray-50" key={adventure._id}>
 
@@ -128,6 +136,13 @@ function Adventures() {
                                                 size="xl"
                                                 className="font-serif"
                                             >{adventure.category.categoryName}
+                                            </Typography>
+                                            <Typography
+                                               
+                                                color="blue-gray"
+                                                size="sm"
+                                                className="font-normal"
+                                            >{adventure.category.catDescription}
                                             </Typography>
 
 

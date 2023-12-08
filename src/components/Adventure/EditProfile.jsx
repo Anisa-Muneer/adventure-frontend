@@ -58,9 +58,10 @@ function EditProfile({adventure}) {
             if(response){
               const adventureDetails = {
                 id: response.data.data._id,
-                image: response.data.data.image,
+                
                 name: response.data.data.name,
                 email: response.data.data.email,
+
             }
             dispatch(setadventuredetails({ adventureInfo: adventureDetails }))
             

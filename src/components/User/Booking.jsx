@@ -5,18 +5,25 @@ import { Ri24HoursLine } from 'react-icons/ri';
 import { AiOutlineSafety } from 'react-icons/ai';
 import { FaPersonHiking } from 'react-icons/fa6';
 import { useQuery } from '@tanstack/react-query';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import userRequest from '../../utils/userRequest';
 import { InformationCircleIcon } from "@heroicons/react/24/solid";
 import Payment from "./Payment";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import { walletPayment } from "../../api/userApi";
+import { GenerateError } from "../../toast/GenerateError";
+import { ToastContainer } from "react-toastify";
 const stripePromise = loadStripe('pk_test_51OF855SGN2zHCLENlnBfUdHrHEbCfUNqspaKKfywKGcqCU4FUYgPL2lbowonYJlZR13VbasNRGuflNVvoXN1Pi6e001LUW1lZq');
 
 function Booking() {
     const location = useLocation()
+    const navigate = useNavigate()
     const [selectedDate, setSelectedDate] = useState("")
     const [clientSecret,setClientSecret] = useState("")
+    const [isClicked, setIsClicked] = useState();
+    const [clickedSlotId, setClickedSlotId] = useState(null);
+    const [paymentMethod, setPaymentMethod] = useState("")
     const [slot,setSlot] = useState("")
     const [booking, setBooking] = useState({
         time: "", 
@@ -83,11 +90,36 @@ function Booking() {
         setSlot(slot)
        setBooking({
             time: slot.slotTime, date: slot.slotDate,fee:fee
+             
         })
+        setIsClicked(slot._id)
+    }
+
+    const handlePayment = async(e)=>{
+        setPaymentMethod(e.target.value)
+    }
+
+  
+
+    const handleWalletPayment = async( bookdata )=>{
+        try {
+            const response = await walletPayment({bookdata})
+            if(response.data.status){
+                
+                navigate("/success")
+            }else{
+                GenerateError(response.data.message)
+            }
+        } catch (error) {
+            console.log(error.message);
+        }
     }
 
 
+  const iconStyles = {
+        color: clickedSlotId === slot._id ? 'blue' : 'black',
 
+  };
 
 
     return (
@@ -196,13 +228,13 @@ function Booking() {
                                         slotData.data.map((slot, slotIndex) => (
                                             <div className="px-4">
                                             {slot && slot.isBooked === false ?
-                                            <div className="flex flex-col mt-2 gap-2" key={slotIndex} onClick={() => handleClick(slot)}>
-                                                  <MdEventSeat className="h-10 w-10 mx-2" />
+                                            <div className={`flex flex-col mt-2 gap-2 ${isClicked === slot?._id ? 'text-blue-400' : 'text-black'} `} key={slot._id} onClick={() => handleClick(slot)}>
+                                                  <MdEventSeat className={`h-10 w-10 mx-2 `}/>
                                                 <Typography className="">
                                                     {slot.slotTime}
                                                 </Typography>
                                             </div>:
-                                            <div className="flex flex-col mt-2 gap-2" key={slotIndex} onClick={() => handleClick(slot)}>
+                                            <div className="flex flex-col mt-2 gap-2" key={slotIndex} >
                                                   <MdEventSeat className="h-10 w-10 mx-2" color="red" />
                                                 <Typography className="" color="red">
                                                     {slot.slotTime}
@@ -247,9 +279,7 @@ function Booking() {
                             className="m-8">
                             YOUR SLOT
                         </Typography>
-                        <div className="px-8">
-                            <hr className="border border-gray-300" />
-                        </div>
+                        
 
 
 
@@ -263,33 +293,74 @@ function Booking() {
                         </div>
                         <div className="flex flex-row justify-around mt-10 w-full">
                             <div className="mr-8 mx-14 w-1/2">Price</div>
-                            <div className="w-1/2">{booking.fee}</div>
+                            <div className="w-1/2 ms-7">{booking.fee}</div>
                         </div>
                         <div className="px-8 mt-8">
                             <hr className="border border-gray-300" />
                         </div>
 
-                        <div className="flex flex-row justify-around mt-10 w-full">
-                            <div className="mr-10 mx-6 w-1/2">Total</div>
-                            <div><h1 className="text-red-800 w-1/2"> {booking.fee}</h1></div>
+                        <div className="flex flex-row justify-around mt-5 w-full">
+                            <div className="mx-14 w-1/2">Total</div>
+                            <div><h1 className="text-red-800 mr-32 "> {booking.fee}</h1></div>
                         </div>
 
-                        {/* <div className="flex flex-row justify-center mt-10">
-                            <Button className="rounded-3xl w-72">Book Now</Button>
-                        </div> */}
+                       <div className=" mt-5">
+                            <hr className="border border-gray-300" />
+                        </div>
+
+                          
+                          <div className="flex flex-row justify-start mt-5 w-full">
+                            <div className="flex justify-between items-center w-full">
+                             <div className="flex mx-9">
+                                 <input
+                               type="checkbox"
+                               value="walletPayment"
+                               onChange={handlePayment}
+                             />
+                            <div className="mx-2">Wallet Payment</div>
+                             </div>
+                            <div className="mx-16 "></div>
+                            </div>
+                        </div>
+
+                          <div className="flex flex-row justify-start mt-5 w-full">
+                            <div className="flex justify-between items-center w-full">
+                             <div className="flex mx-9">
+                                 <input
+                               type="checkbox"
+                               value="onlinePayment"
+                               onChange={handlePayment}
+                             />
+                            <div className="mx-2">Online Payment</div>
+                             </div>
+                            <div className="mx-16 "></div>
+                            </div>
+                        </div>
+                       
 
 
-                        { slot && slot.isBooked === false ? clientSecret && (
+                        { slot && slot.isBooked === false ? ( clientSecret && paymentMethod === "onlinePayment" ? (
                                 <Elements options={options} stripe={stripePromise}>
                                   <Payment Secret={clientSecret} advId={_id} slotId={slot._id} slotDate={slot.slotDate} slotTime={slot.slotTime} fee={fee} categoryName={categoryName} />
                                 </Elements>
-                              ) : ""
-                              }
+                              ) : paymentMethod ==="walletPayment" ? (
+                                <div className="flex flex-row justify-center mt-10" >
+                                   <Button  onClick={()=>handleWalletPayment({ advId: _id, slotId: slot._id, slotDate: slot.slotDate, slotTime: slot.slotTime, fee, categoryName })} className="rounded-3xl w-72">Book Now</Button>
+                                 </div>
+                              ) :(
+                                ""
+                              ) 
+                             ) :
+
+                               (
+                                ""
+                             )}
 
                     </div>
                 </div>
 
             </div>
+            <ToastContainer/>
         </>
     );
 }

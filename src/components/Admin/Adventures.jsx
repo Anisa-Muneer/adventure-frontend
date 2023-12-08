@@ -24,7 +24,7 @@ import { manageAdventure } from "../../api/adminApi";
 
 
 
-const TABLE_HEAD = ["Name", "Status", "Verified", "Date", "Actions"];
+const TABLE_HEAD = ["Name", "Status", "Verified", "Actions"];
 
 export function Adventures() {
   const queryClient = useQueryClient()
@@ -156,15 +156,7 @@ export function Adventures() {
                         />
                       </div>
                     </td>
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {joinDate}
-                      </Typography>
-                    </td>
+                  
                     {is_blocked === false ? (
                       <td className={classes}>
                         <Tooltip content="Block User">

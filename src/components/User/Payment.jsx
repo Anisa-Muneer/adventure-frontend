@@ -35,7 +35,7 @@ function Payment({ secret, advId, slotId, slotDate, slotTime, fee, categoryName 
                 slotId,
                 slotTime,
                 slotDate,
-                paymentstatus : 'Success'
+                status : 'completed'
             }
             const response = await userRequest.post('/paymentSuccess',{bookdata})
 

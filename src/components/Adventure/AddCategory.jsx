@@ -4,41 +4,21 @@ import { Button, Dialog, DialogBody, DialogFooter, DialogHeader, Typography, Inp
 import { useFormik } from 'formik'
 import { categorySchema } from '../../yup/validation'
 import { addCategory } from '../../api/adventureApi'
+import { GenerateError } from '../../toast/GenerateError'
 
 
 function AddCategory({refetch}) {
     const [open, setOpen] = React.useState(false)
+    const [loading, setLoading] = React.useState(false)
     const [selectedImage, setSelectedImage] = useState(null);
     const [error, setError] = useState(null);
 
     const initialValues = {
         categoryName : '',
+        catDescription : '',
         entryFee : '',
         image : ''
     }
-
-    const handleImageChange = (e) => {
-        setSelectedImage(e.target.files[0]);
-      };
-    
-    
-        const validateImage = (file) => {
-            const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
-            const maxSize = 5 * 1024 * 1024; // 5MB
-        
-            if (!allowedTypes.includes(file.type)) {
-              setError("Invalid file type. Please choose a JPEG, PNG, or GIF image.");
-              return false;
-            }
-        
-            if (file.size > maxSize) {
-              setError("Image size is too large. Please choose a smaller image.");
-              return false;
-            }
-        
-            setError(null);
-            return true;
-          };
 
     const {
         values,
@@ -52,14 +32,17 @@ function AddCategory({refetch}) {
         initialValues : initialValues,
         validationSchema : categorySchema, 
         onSubmit : async (values,{ resetForm} )=>{
-            if (!validateImage(selectedImage)) {
-                return;
-              }
-              setFieldValue('image', selectedImage);
+            // if (!validateImage(selectedImage)) {
+            //     return;
+            //   }
+            setLoading(true)
+            //   setFieldValue('image', selectedImage);
              
+
 
             const formData = new FormData()
             formData.append("categoryName",values.categoryName)
+            formData.append("catDescription",values.catDescription)
             formData.append("entryFee",values.entryFee)
             formData.append("image",values.image)
 
@@ -68,6 +51,7 @@ function AddCategory({refetch}) {
             if(response.data.created){
                 resetForm
                 setOpen(!open)
+                setLoading(false)
             }
             refetch()
 
@@ -77,6 +61,7 @@ function AddCategory({refetch}) {
     const handleOpen = () => setOpen(!open)
     return (
         <>
+        
             <p
 
                 className="flex items-center hover:border-1 hover:text-[#13453a] cursor-pointer rounded-xl text-black text-xs">
@@ -115,6 +100,30 @@ function AddCategory({refetch}) {
                         </div>
 
                         <div>
+                            <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="mb-2 font-medium"
+                            >
+                                Description
+                            </Typography>
+                            <Input
+                                type="text"
+                                name="catDescription"
+                                
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.catDescription}
+
+                                className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                            />
+                            {touched.catDescription && errors.catDescription && (
+                  <div className="text-red-500 text-sm ">{errors.catDescription}</div>
+                )}
+
+                        </div>
+
+                        <div>
               <Typography
                 variant="small"
                 color="blue-gray"
@@ -127,9 +136,16 @@ function AddCategory({refetch}) {
                 accept="image/*"
                 className=" !border-t-blue-gray-200 text-center focus:!border-t-gray-900"
                 name='image'
-                onChange={handleImageChange}
+                 onChange={(e) => {
+                                const selectedFile = e.currentTarget.files[0];
+                                setFieldValue("image", selectedFile);
+                            }}
          
               />
+               {touched.image && errors.image && (
+                  <div className="text-red-500 text-sm ">{errors.image}</div>
+                )}
+
             </div>
 
 
@@ -167,9 +183,13 @@ function AddCategory({refetch}) {
                         >
                             <span>Cancel</span>
                         </Button>
+                        {loading ?
+                            <Button  variant="gradient" color="green" className='disabled'>
+                            <span>please wait</span>
+                        </Button> :
                         <Button type="submit" variant="gradient" color="green">
                             <span>Submit</span>
-                        </Button>
+                        </Button>}
                     </DialogFooter>
                 </form>
             </Dialog>
