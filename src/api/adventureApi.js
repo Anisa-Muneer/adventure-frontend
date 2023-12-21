@@ -71,7 +71,6 @@ export const setSlot = (data) => {
 
 export async function addCategory(value) {
     try {
-        console.log(value, 'uuuuuuuuuuuuuuuuuu');
         const data = await adventureRequest.post('/addCategory', value, {
             WithCredentials: true,
             header: {
@@ -101,7 +100,6 @@ export async function slotDelete(id, slotId) {
 
 export async function editCategory(data) {
     try {
-        console.log('lplplplplplplplpplp', data);
         const response = await adventureRequest.post('/editCategory', data, {
             withCredentials: true,
             headers: {
@@ -112,4 +110,27 @@ export async function editCategory(data) {
     } catch (error) {
         return error
     }
+}
+
+
+export async function addPosts(value) {
+    try {
+        const data = await adventureRequest.post('/addPosts', value, {
+            withCredentials: true,
+            header: {
+                "content-type": "multipart/form-data",
+
+            }
+        })
+        return data
+
+    } catch (error) {
+        return error
+    }
+}
+
+
+export async function deletePost(id) {
+    console.log(id, 'id is here');
+    return adventureRequest.post('/deletePost', id);
 }

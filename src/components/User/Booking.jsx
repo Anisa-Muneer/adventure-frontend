@@ -20,26 +20,27 @@ function Booking() {
     const location = useLocation()
     const navigate = useNavigate()
     const [selectedDate, setSelectedDate] = useState("")
-    const [clientSecret,setClientSecret] = useState("")
+    const [clientSecret, setClientSecret] = useState("")
     const [isClicked, setIsClicked] = useState();
+    const [selectedSeats, setSelectedSeats] = useState([]);
     const [clickedSlotId, setClickedSlotId] = useState(null);
     const [paymentMethod, setPaymentMethod] = useState("")
-    const [slot,setSlot] = useState("")
+    const [slot, setSlot] = useState("")
     const [booking, setBooking] = useState({
-        time: "", 
+        time: "",
         date: "",
-        fee:null
+        fee: null
     })
 
-    
+
     const { categoryName, fee, _id } = location.state;
 
-    useEffect(()=>{
-        if(_id){
-            const makePayment=async()=>{
+    useEffect(() => {
+        if (_id) {
+            const makePayment = async () => {
                 try {
                     const response = await userRequest.get(`/payment/${_id}/${categoryName}`)
-                    console.log(response,'its a response');
+                    console.log(response, 'its a response');
                     setClientSecret(response.data.clientSecret);
                 } catch (error) {
                     console.log(error.message);
@@ -47,16 +48,16 @@ function Booking() {
             }
             makePayment()
         }
-        
-    },[_id])
+
+    }, [_id])
 
     const appearance = {
         theme: 'stripe',
-      };
-      const options = {
+    };
+    const options = {
         clientSecret,
         appearance,
-      };
+    };
 
 
     const { isLoading: dateIsLoading, error: dateError, data: dateData } = useQuery({
@@ -88,26 +89,35 @@ function Booking() {
 
     const handleClick = async (slot) => {
         setSlot(slot)
-       setBooking({
-            time: slot.slotTime, date: slot.slotDate,fee:fee
-             
-        })
-        setIsClicked(slot._id)
-    }
+        setBooking({
+            time: slot.slotTime, date: slot.slotDate, fee: fee
 
-    const handlePayment = async(e)=>{
+        })
+        // setIsClicked(slot._id)
+        const isSeatSelected = selectedSeats.includes(slot._id);
+        setSelectedSeats((prevSelectedSeats) => {
+            if (isSeatSelected) {
+                return prevSelectedSeats.filter((seat) => seat !== slot._id);
+            } else {
+                return [...prevSelectedSeats, slot._id];
+            }
+        });
+    }
+    const totalAmount = booking.fee * selectedSeats.length;
+
+    const handlePayment = async (e) => {
         setPaymentMethod(e.target.value)
     }
 
-  
 
-    const handleWalletPayment = async( bookdata )=>{
+
+    const handleWalletPayment = async (bookdata) => {
         try {
-            const response = await walletPayment({bookdata})
-            if(response.data.status){
-                
+            const response = await walletPayment({ bookdata })
+            if (response.data.status) {
+
                 navigate("/success")
-            }else{
+            } else {
                 GenerateError(response.data.message)
             }
         } catch (error) {
@@ -116,10 +126,12 @@ function Booking() {
     }
 
 
-  const iconStyles = {
+    const iconStyles = {
         color: clickedSlotId === slot._id ? 'blue' : 'black',
 
-  };
+    };
+
+
 
 
     return (
@@ -227,21 +239,21 @@ function Booking() {
                                     {slotData.data ? (
                                         slotData.data.map((slot, slotIndex) => (
                                             <div className="px-4">
-                                            {slot && slot.isBooked === false ?
-                                            <div className={`flex flex-col mt-2 gap-2 ${isClicked === slot?._id ? 'text-blue-400' : 'text-black'} `} key={slot._id} onClick={() => handleClick(slot)}>
-                                                  <MdEventSeat className={`h-10 w-10 mx-2 `}/>
-                                                <Typography className="">
-                                                    {slot.slotTime}
-                                                </Typography>
-                                            </div>:
-                                            <div className="flex flex-col mt-2 gap-2" key={slotIndex} >
-                                                  <MdEventSeat className="h-10 w-10 mx-2" color="red" />
-                                                <Typography className="" color="red">
-                                                    {slot.slotTime}
-                                                </Typography>
+                                                {slot && slot.isBooked === false ?
+                                                    <div className={`flex flex-col mt-2 gap-2 ${selectedSeats.includes(slot._id) ? 'text-blue-400' : 'text-black'} `} key={slot._id} onClick={() => handleClick(slot)}>
+                                                        <MdEventSeat className={`h-10 w-10 mx-2 `} />
+                                                        <Typography className="">
+                                                            {slot.slotTime}
+                                                        </Typography>
+                                                    </div> :
+                                                    <div className="flex flex-col mt-2 gap-2" key={slotIndex} >
+                                                        <MdEventSeat className="h-10 w-10 mx-2" color="red" />
+                                                        <Typography className="" color="red">
+                                                            {slot.slotTime}
+                                                        </Typography>
+                                                    </div>
+                                                }
                                             </div>
-                                        }
-                                        </div>
 
                                         ))
                                     ) : (
@@ -279,7 +291,7 @@ function Booking() {
                             className="m-8">
                             YOUR SLOT
                         </Typography>
-                        
+
 
 
 
@@ -299,68 +311,69 @@ function Booking() {
                             <hr className="border border-gray-300" />
                         </div>
 
+
                         <div className="flex flex-row justify-around mt-5 w-full">
                             <div className="mx-14 w-1/2">Total</div>
-                            <div><h1 className="text-red-800 mr-32 "> {booking.fee}</h1></div>
+                            <div><h1 className="text-red-800 mr-32 "> {totalAmount}</h1></div>
                         </div>
 
-                       <div className=" mt-5">
+                        <div className=" mt-5">
                             <hr className="border border-gray-300" />
                         </div>
 
-                          
-                          <div className="flex flex-row justify-start mt-5 w-full">
+
+                        <div className="flex flex-row justify-start mt-5 w-full">
                             <div className="flex justify-between items-center w-full">
-                             <div className="flex mx-9">
-                                 <input
-                               type="checkbox"
-                               value="walletPayment"
-                               onChange={handlePayment}
-                             />
-                            <div className="mx-2">Wallet Payment</div>
-                             </div>
-                            <div className="mx-16 "></div>
+                                <div className="flex mx-9">
+                                    <input
+                                        type="checkbox"
+                                        value="walletPayment"
+                                        onChange={handlePayment}
+                                    />
+                                    <div className="mx-2">Wallet Payment</div>
+                                </div>
+                                <div className="mx-16 "></div>
                             </div>
                         </div>
 
-                          <div className="flex flex-row justify-start mt-5 w-full">
+                        <div className="flex flex-row justify-start mt-5 w-full">
                             <div className="flex justify-between items-center w-full">
-                             <div className="flex mx-9">
-                                 <input
-                               type="checkbox"
-                               value="onlinePayment"
-                               onChange={handlePayment}
-                             />
-                            <div className="mx-2">Online Payment</div>
-                             </div>
-                            <div className="mx-16 "></div>
+                                <div className="flex mx-9">
+                                    <input
+                                        type="checkbox"
+                                        value="onlinePayment"
+                                        onChange={handlePayment}
+                                    />
+                                    <div className="mx-2">Online Payment</div>
+                                </div>
+                                <div className="mx-16 "></div>
                             </div>
                         </div>
-                       
 
 
-                        { slot && slot.isBooked === false ? ( clientSecret && paymentMethod === "onlinePayment" ? (
-                                <Elements options={options} stripe={stripePromise}>
-                                  <Payment Secret={clientSecret} advId={_id} slotId={slot._id} slotDate={slot.slotDate} slotTime={slot.slotTime} fee={fee} categoryName={categoryName} />
-                                </Elements>
-                              ) : paymentMethod ==="walletPayment" ? (
-                                <div className="flex flex-row justify-center mt-10" >
-                                   <Button  onClick={()=>handleWalletPayment({ advId: _id, slotId: slot._id, slotDate: slot.slotDate, slotTime: slot.slotTime, fee, categoryName })} className="rounded-3xl w-72">Book Now</Button>
-                                 </div>
-                              ) :(
+
+                        {slot && slot.isBooked === false ? (clientSecret && paymentMethod === "onlinePayment" ? (
+                            <Elements options={options} stripe={stripePromise}>
+                                <Payment Secret={clientSecret} advId={_id} slotId={slot._id} slotDate={slot.slotDate} slotTime={slot.slotTime} fee={totalAmount} categoryName={categoryName} />
+                            </Elements>
+                        ) : paymentMethod === "walletPayment" ? (
+                            <div className="flex flex-row justify-center mt-10" >
+                                <Button onClick={() => handleWalletPayment({ advId: _id, slotId: slot._id, slotDate: slot.slotDate, slotTime: slot.slotTime, totalAmount, categoryName })} className="rounded-3xl w-72">Book Now</Button>
+                            </div>
+                        ) : (
+                            ""
+                        )
+                        ) :
+
+                            (
                                 ""
-                              ) 
-                             ) :
-
-                               (
-                                ""
-                             )}
+                            )}
 
                     </div>
                 </div>
 
             </div>
-            <ToastContainer/>
+            <ToastContainer />
         </>
     );
 }

@@ -5,9 +5,9 @@ import { isLastMessage, isSameSender, isSameSenderMargin, isSameUser } from './C
 import { ChatState } from './Context/ChatProvider';
 
 
-const ScrollableChat = ({messages}) => {
-    const { user } = ChatState()
-     const chatContainerRef = useRef(null);
+const ScrollableChat = ({ messages }) => {
+  const { user } = ChatState()
+  const chatContainerRef = useRef(null);
 
 
   useEffect(() => {
@@ -23,15 +23,15 @@ const ScrollableChat = ({messages}) => {
         overflowY: 'auto',
       }}
     >
-      {messages && 
-        messages.map((m,i)=>(
-console.log(messages,'its a message'),
-         <div style={{ display: "flex" }} key={i}>
-            {(isSameSender(messages, m, i, user.id)||
-            isLastMessage(messages, i, user.id)) && (
+      {messages &&
+        messages.map((m, i) => (
+          console.log(messages, 'its a message'),
+          <div style={{ display: "flex" }} key={i}>
+            {(isSameSender(messages, m, i, user.id) ||
+              isLastMessage(messages, i, user.id)) && (
 
-                <Tooltip label={m.sender.adventure.name}  placement="bottom-start" hasArrow>
-               
+                <Tooltip label={m.sender.adventure.name} placement="bottom-start" hasArrow>
+
                   <Avatar
                     mt="7px"
                     mr={1}
@@ -40,25 +40,24 @@ console.log(messages,'its a message'),
                     height={"8"}
                     cursor="pointer"
                     name={m.sender.name}
-                    src={ m.sender.adventure.image}
-                    />
-              
-          
-              
-              </Tooltip>
-         
-                    )}
+                    src={m.sender.adventure.image}
+                  />
+
+
+
+                </Tooltip>
+
+              )}
             <span
               style={{
-                backgroundColor: `${
-                  m.sender.user
-                    ? m.sender.user.id === user.id
-                      ? "#BEE3F8"
-                      : "#B9F5D0"
-                    : m.sender.adventure._id === user.id
+                backgroundColor: `${m.sender.user
+                  ? m.sender.user?.id === user.id
                     ? "#BEE3F8"
                     : "#B9F5D0"
-                }`,
+                  : m.sender.adventure?._id === user.id
+                    ? "#BEE3F8"
+                    : "#B9F5D0"
+                  }`,
                 marginLeft: isSameSenderMargin(messages, m, i, user.id),
                 marginTop: isSameUser(messages, m, i, user.id) ? 3 : 10,
                 borderRadius: "20px",
@@ -69,7 +68,7 @@ console.log(messages,'its a message'),
               {m.content}
             </span>
           </div>
-  ))}
+        ))}
     </div>
   )
 }

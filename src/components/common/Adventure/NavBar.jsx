@@ -37,7 +37,7 @@ function ProfileMenu() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { adventureInfo } = useSelector(state => state.adventure)
-  console.log(adventureInfo,'adventureInfo is here');
+  console.log(adventureInfo, 'adventureInfo is here');
   const id = adventureInfo.id
   const handleLogout = () => {
     localStorage.removeItem("currentAdventure")
@@ -60,7 +60,7 @@ function ProfileMenu() {
       <MenuHandler>
         <Button
           variant="text"
-          color="blue-gray"
+          color="white"
           className="flex items-center gap-1 rounded-full py-0.5 pr-2 pl-0.5 lg:ml-auto"
         >
           <Avatar
@@ -70,7 +70,7 @@ function ProfileMenu() {
             className="border border-gray-900 p-0.5"
             src={adventureInfo.image}
           />
-          <Typography color="black">{adventureInfo.name}</Typography>
+          <Typography color="white">{adventureInfo.name}</Typography>
 
           <ChevronDownIcon
             strokeWidth={2.5}
@@ -97,8 +97,8 @@ function ProfileMenu() {
                 }
               }}
               className={`flex items-center gap-2 rounded ${isLastItem
-                  ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
-                  : ""
+                ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
+                : ""
                 }`}
             >
               {React.createElement(icon, {

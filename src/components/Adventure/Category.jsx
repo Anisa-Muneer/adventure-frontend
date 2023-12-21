@@ -1,5 +1,10 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { PencilIcon, UserPlusIcon, ArrowPathIcon, NoSymbolIcon } from "@heroicons/react/24/solid";
+import {
+    PencilIcon,
+    UserPlusIcon,
+    ArrowPathIcon,
+    NoSymbolIcon,
+} from "@heroicons/react/24/solid";
 import {
     Card,
     CardHeader,
@@ -23,37 +28,34 @@ import AddCategory from "./AddCategory";
 import adventureRequest from "../../utils/adventureRequest";
 import EditCategory from "./EditCategory";
 
-
-
-const TABLE_HEAD = ["Name", "Description", "Entry Fee", "Status", "Action",""];
+const TABLE_HEAD = ["Name", "Description", "Entry Fee", "Status", "Action", ""];
 export function Category() {
-    const queryClient = useQueryClient()
+    const queryClient = useQueryClient();
     const { isLoading, error, data, refetch } = useQuery({
-        queryKey: ['category'],
-        queryFn: () => adventureRequest.get('/allCategory').then((res) => res.data)
-
-    })
-console.log(data,"cat data");
+        queryKey: ["category"],
+        queryFn: () => adventureRequest.get("/allCategory").then((res) => res.data),
+    });
+    console.log(data, "cat data");
     if (isLoading) {
-        return <div className="h-screen flex justify-center items-center"><Spinner color="blue" className="h-10 w-10 " /></div>
-
+        return (
+            <div className="h-screen flex justify-center items-center">
+                <Spinner color="blue" className="h-10 w-10 " />
+            </div>
+        );
     }
     if (error) {
-        return <h1>Something went wrong</h1>
+        return <h1>Something went wrong</h1>;
     }
 
     const handleActionList = async (categoryId) => {
-        await manageCategoryList(categoryId)
-        queryClient.invalidateQueries('category')
-    }
+        await manageCategoryList(categoryId);
+        queryClient.invalidateQueries("category");
+    };
 
-    
     const handleAction = async (categoryId) => {
-        await manageCategory(categoryId)
-        queryClient.invalidateQueries('category')
-    }
-
-
+        await manageCategory(categoryId);
+        queryClient.invalidateQueries("category");
+    };
 
     return (
         <Card className="h-full w-full">
@@ -68,7 +70,6 @@ console.log(data,"cat data");
                         </Typography>
                     </div>
                     <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-
                         <AddCategory refetch={refetch} />
                     </div>
                 </div>
@@ -76,8 +77,8 @@ console.log(data,"cat data");
                     <Tabs value="all" className="w-full md:w-max">
                         <TabsHeader>
                             <Tab value="">All</Tab>
-                            <Tab value="active" >Active</Tab>
-                            <Tab value="blocked" >Blocked</Tab>
+                            <Tab value="active">Active</Tab>
+                            <Tab value="blocked">Blocked</Tab>
                         </TabsHeader>
                     </Tabs>
                     <div className="w-full md:w-72">
@@ -109,114 +110,122 @@ console.log(data,"cat data");
                         </tr>
                     </thead>
                     <tbody>
-                        {data.data.category.map(
-                            (cat, index) => {
-                                const isLast = index === data.data.length - 1;
-                                const classes = isLast
-                                    ? "p-4"
-                                    : "p-4 border-b border-blue-gray-50";
+                        {data.data.category.map((cat, index) => {
+                            const isLast = index === data.data.length - 1;
+                            const classes = isLast
+                                ? "p-4"
+                                : "p-4 border-b border-blue-gray-50";
 
-                                return (
-                                    <tr key={cat._id}>
-                                        <td className={classes}>
-                                            <div className="flex items-center gap-3">
-                                                <Avatar  src={cat.image} />
-                                                <div className="flex flex-col">
-                                                    <Typography
-                                                        variant="small"
-                                                        color="blue-gray"
-                                                        className="font-normal"
-                                                    >
-                                                        {cat.categoryName}
-                                                    </Typography>
-                                                    <Typography
-                                                        variant="small"
-                                                        color="blue-gray"
-                                                        className="font-normal opacity-70"
-                                                    >
-
-                                                    </Typography>
-                                                </div>
-                                            </div>
-                                        </td>
-                                         <td className={classes}>
+                            return (
+                                <tr key={cat._id}>
+                                    <td className={classes}>
+                                        <div className="flex items-center gap-3">
+                                            <Avatar src={cat.image} />
                                             <div className="flex flex-col">
                                                 <Typography
                                                     variant="small"
                                                     color="blue-gray"
                                                     className="font-normal"
                                                 >
-                                                    {cat.catDescription}
+                                                    {cat.categoryName}
                                                 </Typography>
                                                 <Typography
                                                     variant="small"
                                                     color="blue-gray"
                                                     className="font-normal opacity-70"
-                                                >
-
-                                                </Typography>
+                                                ></Typography>
                                             </div>
-                                        </td>
-                                        <td className={classes}>
-                                            <div className="flex flex-col">
-                                                <Typography
-                                                    variant="small"
-                                                    color="blue-gray"
-                                                    className="font-normal"
-                                                >
-                                                    {cat.entryFee}
-                                                </Typography>
-                                                <Typography
-                                                    variant="small"
-                                                    color="blue-gray"
-                                                    className="font-normal opacity-70"
-                                                >
-
-                                                </Typography>
-                                            </div>
-                                        </td>
-                                        <td className={classes}>
-                                            <div className="w-max">
-                                                <Chip
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    value={cat.status === false ? "deleted" : "active"}
-                                                    color={cat.status === false ? "red" : "green"}
-                                                />
-                                            </div>
-                                        </td>
-                                        <>
-                                            {cat.status === true ? (
-                                                <td className={classes}>
-                                                    <Tooltip content="Delete Department">
-                                                        <Button size="sm" color="red" className="rounded-md flex gap-3" variant="outlined" onClick={() => handleAction(cat._id)}>
-                                                            <NoSymbolIcon strokeWidth={1.5} stroke="currentColor" className="h-4 w-4" />
-                                                            Unlist
-                                                        </Button>
-                                                    </Tooltip>
-                                                </td>
-
-                                            ) : (
-
-                                                <td className={classes}>
-                                                    {/* <Tooltip content="Undo Delete"> */}
-                                                    <Button size="sm" color="green" className="rounded-md flex gap-2" variant="outlined" onClick={() => handleActionList(cat._id)}>
-                                                        <ArrowPathIcon strokeWidth={1.5} stroke="currentColor" className="h-4 w-4" />
-
-                                                        List
+                                        </div>
+                                    </td>
+                                    <td className={classes}>
+                                        <div className="flex flex-col">
+                                            <Typography
+                                                variant="small"
+                                                color="blue-gray"
+                                                className="font-normal"
+                                            >
+                                                {cat.catDescription}
+                                            </Typography>
+                                            <Typography
+                                                variant="small"
+                                                color="blue-gray"
+                                                className="font-normal opacity-70"
+                                            ></Typography>
+                                        </div>
+                                    </td>
+                                    <td className={classes}>
+                                        <div className="flex flex-col">
+                                            <Typography
+                                                variant="small"
+                                                color="blue-gray"
+                                                className="font-normal"
+                                            >
+                                                {cat.entryFee}
+                                            </Typography>
+                                            <Typography
+                                                variant="small"
+                                                color="blue-gray"
+                                                className="font-normal opacity-70"
+                                            ></Typography>
+                                        </div>
+                                    </td>
+                                    <td className={classes}>
+                                        <div className="w-max">
+                                            <Chip
+                                                variant="ghost"
+                                                size="sm"
+                                                value={cat.status === false ? "deleted" : "active"}
+                                                color={cat.status === false ? "red" : "green"}
+                                            />
+                                        </div>
+                                    </td>
+                                    <>
+                                        {cat.status === true ? (
+                                            <td className={classes}>
+                                                <Tooltip content="Delete Department">
+                                                    <Button
+                                                        size="sm"
+                                                        color="red"
+                                                        className="rounded-md flex gap-3"
+                                                        variant="outlined"
+                                                        onClick={() => handleAction(cat._id)}
+                                                    >
+                                                        <NoSymbolIcon
+                                                            strokeWidth={1.5}
+                                                            stroke="currentColor"
+                                                            className="h-4 w-4"
+                                                        />
+                                                        Unlist
                                                     </Button>
-                                                    {/* </Tooltip> */}
-                                                </td>
-                                            )}
-
-                                        </>
-                                        <td>
-                                            <EditCategory category={cat}/>
-                                        </td>
-                                    </tr>
-                                );
-                            },
-                        )}
+                                                </Tooltip>
+                                            </td>
+                                        ) : (
+                                            <td className={classes}>
+                                                {/* <Tooltip content="Undo Delete"> */}
+                                                <Button
+                                                    size="sm"
+                                                    color="green"
+                                                    className="rounded-md flex gap-2"
+                                                    variant="outlined"
+                                                    onClick={() => handleActionList(cat._id)}
+                                                >
+                                                    <ArrowPathIcon
+                                                        strokeWidth={1.5}
+                                                        stroke="currentColor"
+                                                        className="h-4 w-4"
+                                                    />
+                                                    List
+                                                </Button>
+                                                {/* </Tooltip> */}
+                                            </td>
+                                        )}
+                                    </>
+                                    <td>
+                                        <EditCategory category={cat} />
+                                    </td>
+                                </tr>
+                            );
+                        })}
                     </tbody>
                 </table>
             </CardBody>

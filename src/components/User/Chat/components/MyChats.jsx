@@ -1,26 +1,26 @@
 import React, { useEffect, useState } from 'react'
 import userRequest from "../../../../utils/userRequest"
-import {useSelector} from 'react-redux'
+import { useSelector } from 'react-redux'
 import SideDrawer from './SideDrawer'
 import { Spinner } from "@material-tailwind/react";
 import { Box } from "@chakra-ui/react";
 import { Stack, Text } from "@chakra-ui/layout";
 import { ChatState } from './Context/ChatProvider';
 import dp from "../../../../assets/images/dp.png"
-const MyChats = ({fetchAgain}) => {
+const MyChats = ({ fetchAgain }) => {
     const [loggedUser, setLoggedUser] = useState()
     const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
-    console.log(chats,'chat is here');
-    const fetchChats = async()=>{
+    console.log(chats, 'chat is here');
+    const fetchChats = async () => {
         try {
-             const config = {
+            const config = {
                 headers: {
                     Authorization: `Bearer ${user.token}`,
                 },
             };
             const userId = user.id
-            const { data } = await userRequest.get(`/fetchchat/${userId}`,config)
-            console.log(data,'chats data');
+            const { data } = await userRequest.get(`/fetchchat/${userId}`, config)
+            console.log(data, 'chats data');
             setChats(data)
             console.log(chats);
         } catch (error) {
@@ -28,13 +28,13 @@ const MyChats = ({fetchAgain}) => {
         }
     }
 
-    const {userInfo} = useSelector((state)=>state.user)
-    useEffect(()=>{
+    const { userInfo } = useSelector((state) => state.user)
+    useEffect(() => {
         setLoggedUser(userInfo)
         fetchChats()
-    },[fetchAgain]) 
-  return (
-   <Box
+    }, [fetchAgain])
+    return (
+        <Box
             display={{ base: selectedChat ? "none" : "flex", md: "flex" }}
             flexDir="column"
             alignItems="center"
@@ -64,7 +64,7 @@ const MyChats = ({fetchAgain}) => {
                     My Chats
                 </Box>
                 <Box>
-              {user && <SideDrawer />}
+                    {user && <SideDrawer />}
                 </Box>
             </Box>
             <Box
@@ -79,31 +79,31 @@ const MyChats = ({fetchAgain}) => {
 
             >
 
-              {chats ? (
-                  <Stack overflowY="scroll">
-                    {chats.map((chat)=>(
+                {chats ? (
+                    <Stack overflowY="scroll">
+                        {chats.map((chat) => (
 
-                        
-                        <Box
-                        onClick={()=> setSelectedChat(chat)}
-                        cursor="pointer"
-                        bg={selectedChat === chat ? "#38B2AC" : "white"}
-                        color={selectedChat === chat ? "white" : "black"}
-                        px={3}
-                        py={2}
+
+                            <Box
+                                onClick={() => setSelectedChat(chat)}
+                                cursor="pointer"
+                                bg={selectedChat === chat ? "#38B2AC" : "white"}
+                                color={selectedChat === chat ? "white" : "black"}
+                                px={3}
+                                py={2}
                                 borderRadius="lg"
                                 key={chat._id}
                                 display="flex"
-                                >
+                            >
                                 <Box>
-                                    <img src={chat.users.adventure ? chat.users.adventure.image : dp} className="h-10 w-10 me-3 rounded-full"/>
+                                    <img src={chat.users.adventure ? chat.users.adventure.image : dp} className="h-10 w-10 me-3 rounded-full" />
                                 </Box>
                                 <Box>
                                     <Text>
-                                       {chat.users.adventure?.name }
+                                        {chat.users?.adventure?.name}
                                     </Text>
-                                   
-                                       {chat.latestMessage && (
+
+                                    {chat.latestMessage && (
                                         <Text fontSize="xs">
                                             <b>
                                                 {chat.latestMessage.sender?.adventure
@@ -116,23 +116,23 @@ const MyChats = ({fetchAgain}) => {
                                                 : chat.latestMessage.content}
                                         </Text>
                                     )}
-                           
+
                                 </Box>
                             </Box>
-                   
-                                ))}
+
+                        ))}
                     </Stack>
-                     ):(
+                ) : (
 
-                         
-                        //   <ChatLoading /> 
+
+                    //   <ChatLoading /> 
                     <Spinner />
-                         )}
+                )}
 
-       
+
             </Box>
         </Box>
-  )
+    )
 }
 
 export default MyChats

@@ -78,7 +78,6 @@ function Booking() {
   // };
   const handleDelete = async (slotId, Id) => {
     try {
-      console.log("Deleting slot with ID:", slotId, Id);
       const response = await slotDelete(slotId, Id);
 
       if (response.data.success) {
@@ -171,118 +170,114 @@ function Booking() {
                         <tbody>
                           {slotData && slotData.data
                             ? slotData.data.map(
-                                (data, i) => (
-                                  console.log(slotData.data, "llkkjjhhggff"),
-                                  // For each 'data' in slotData.data, create a separate row (tr)
-                                  data.slotes.map(
-                                    (slot, index) => (
-                                      console.log(data, "lllllllllllllllllll"),
-                                      console.log(
-                                        data.slotes,
-                                        "data.slote is here"
-                                      ),
-                                      (
-                                        <tr key={`${i}-${index}`}>
-                                          <td>
-                                            <div className="flex items-center mx-7">
-                                              <div>
-                                                <Typography
-                                                  color="blue-gray"
-                                                  className="mb-2"
-                                                >
-                                                  {slot.category}
-                                                </Typography>
-                                              </div>
-                                            </div>
-                                          </td>
+                              (data, i) => (
+                                console.log(slotData.data, "llkkjjhhggff"),
+                                // For each 'data' in slotData.data, create a separate row (tr)
+                                data.slotes.map(
+                                  (slot, index) => (
 
-                                          <td>
-                                            <div className="flex items-center mx-7">
-                                              <div>
-                                                <Typography
-                                                  color="blue-gray"
-                                                  className="mb-2"
-                                                >
-                                                  Date:{" "}
-                                                  {new Date(
-                                                    slot.slotDate
-                                                  ).toLocaleDateString("en-GB")}
-                                                </Typography>
-                                              </div>
+                                    (
+                                      <tr key={`${i}-${index}`}>
+                                        <td>
+                                          <div className="flex items-center mx-7">
+                                            <div>
+                                              <Typography
+                                                color="blue-gray"
+                                                className="mb-2"
+                                              >
+                                                {slot.category}
+                                              </Typography>
                                             </div>
-                                          </td>
+                                          </div>
+                                        </td>
 
-                                          <td>
-                                            <div className="flex items-center mx-7">
-                                              <div>
-                                                <Typography
-                                                  color="blue-gray"
-                                                  className="mb-2"
-                                                >
-                                                  {slot.slotTime}
-                                                </Typography>
-                                              </div>
+                                        <td>
+                                          <div className="flex items-center mx-7">
+                                            <div>
+                                              <Typography
+                                                color="blue-gray"
+                                                className="mb-2"
+                                              >
+                                                Date:{" "}
+                                                {new Date(
+                                                  slot.slotDate
+                                                ).toLocaleDateString("en-GB")}
+                                              </Typography>
                                             </div>
-                                          </td>
+                                          </div>
+                                        </td>
 
-                                          <td>
+                                        <td>
+                                          <div className="flex items-center mx-7">
+                                            <div>
+                                              <Typography
+                                                color="blue-gray"
+                                                className="mb-2"
+                                              >
+                                                {slot.slotTime}
+                                              </Typography>
+                                            </div>
+                                          </div>
+                                        </td>
+
+                                        <td>
+                                          <div className="flex items-center mx-7">
+                                            <div>
+                                              <Typography
+                                                color="light-green"
+                                                className="mb-2"
+                                              >
+                                                <Chip
+                                                  className="text-center my-2"
+                                                  variant="ghost"
+                                                  size="md"
+                                                  value={
+                                                    slot.isBooked === true
+                                                      ? "BOOKED"
+                                                      : "AVAILABLE"
+                                                  }
+                                                  color={
+                                                    slot.isBooked === true
+                                                      ? "red"
+                                                      : "green"
+                                                  }
+                                                />
+                                              </Typography>
+                                            </div>
+                                          </div>
+                                        </td>
+                                        <td>
+                                          {slot.isBooked === false ? (
                                             <div className="flex items-center mx-7">
                                               <div>
-                                                <Typography
-                                                  color="light-green"
-                                                  className="mb-2"
-                                                >
-                                                  <Chip
-                                                    className="text-center my-2"
-                                                    variant="ghost"
-                                                    size="md"
-                                                    value={
-                                                      slot.isBooked === true
-                                                        ? "BOOKED"
-                                                        : "AVAILABLE"
+                                                <Tooltip content="Delete User">
+                                                  <Button
+                                                    size="sm"
+                                                    color="green"
+                                                    className="rounded-md flex px-5"
+                                                    variant="outlined"
+                                                    onClick={() =>
+                                                      handleDelete(
+                                                        slot._id,
+                                                        data._id
+                                                      )
                                                     }
-                                                    color={
-                                                      slot.isBooked === true
-                                                        ? "red"
-                                                        : "green"
-                                                    }
-                                                  />
-                                                </Typography>
+                                                  >
+                                                    Delete
+                                                  </Button>
+                                                </Tooltip>
                                               </div>
                                             </div>
-                                          </td>
-                                          <td>
-                                            {slot.isBooked === false ? (
-                                              <div className="flex items-center mx-7">
-                                                <div>
-                                                  <Tooltip content="Delete User">
-                                                    <Button
-                                                      size="sm"
-                                                      color="green"
-                                                      className="rounded-md flex px-5"
-                                                      variant="outlined"
-                                                      onClick={() =>
-                                                        handleDelete(
-                                                          slot._id,
-                                                          data._id
-                                                        )
-                                                      }
-                                                    >
-                                                      Delete
-                                                    </Button>
-                                                  </Tooltip>
-                                                </div>
-                                              </div>
-                                            ) : (
-                                              <></>
-                                            )}
-                                          </td>
-                                        </tr>
-                                      )
+                                          ) : (
+                                            <></>
+                                          )}
+                                        </td>
+                                      </tr>
                                     )
                                   )
                                 )
                               )
+                            )
                             : ""}
                         </tbody>
                       </table>
