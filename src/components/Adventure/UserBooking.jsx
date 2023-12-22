@@ -4,7 +4,7 @@ import React from 'react'
 import adventureRequest from '../../utils/adventureRequest';
 
 function UserBooking() {
-    const TABLE_HEAD = ["Category", "User", "Date", "Time"];
+    const TABLE_HEAD = ["Category", "User", "No of Slots", "Date", "Time"];
 
     const { isLoading, error, data } = useQuery({
         queryKey: ['userBooking'],
@@ -89,6 +89,15 @@ function UserBooking() {
                                                                     <div>
                                                                         <Typography color="blue-gray" className="mb-2">
                                                                             {booking.userId.name}
+                                                                        </Typography>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div className="flex items-center mx-7">
+                                                                    <div>
+                                                                        <Typography color="blue-gray" className="mb-2">
+                                                                            8
                                                                         </Typography>
                                                                     </div>
                                                                 </div>

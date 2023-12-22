@@ -17,6 +17,8 @@ import { slotSchema } from "../../yup/validation";
 import { QueryClient, useQuery } from "@tanstack/react-query";
 import adventureRequest from "../../utils/adventureRequest";
 import { setSlot } from "../../api/adventureApi";
+import { GenerateError, GenerateSuccess } from "../../toast/GenerateError";
+import { ToastContainer } from "react-toastify";
 
 
 export function AddSlot() {
@@ -37,6 +39,7 @@ export function AddSlot() {
     const initialValues = {
         category: "",
         startdate: "",
+        NoofSlots: "",
         enddate: "",
         startTimeHour: "",
         startTimeMinute: "",
@@ -65,19 +68,22 @@ export function AddSlot() {
                 endDate: values.enddate,
                 startTime: startTime,
                 endTime: endTime,
-                category : values.category
+                category: values.category,
+                NoofSlots: values.NoofSlots
             };
-            console.log(values, 'its a values');
+            // console.log(values, 'its a values');
 
             try {
                 const response = await setSlot(slotData);
-                console.log(response,'jjjjdddedryeyrery');
+                console.log(response, 'response');
                 if (response) {
+                    GenerateError(response.data.message)
+                    console.log("response.data.message")
                     setOpen(!open)
                     QueryClient.invalidateQueries('slotsAdventure')
                 }
             } catch (error) {
-
+                GenerateError(error.data.message)
                 console.error('Error setting slot:', error);
             }
         }
@@ -132,7 +138,7 @@ export function AddSlot() {
                             >
                                 category
                             </Typography>
-                            
+
                             <select
                                 name="category"
                                 value={values.category}
@@ -152,6 +158,28 @@ export function AddSlot() {
                                 <div className="text-red-500 text-xs">
                                     {errors.category}
                                 </div>
+                            )}
+
+                            <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="mb-2 font-medium"
+
+                            >
+                                No of Slots
+                            </Typography>
+
+                            <Input
+                                type="number"
+                                name="NoofSlots"
+                                className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.NoofSlots}
+                            />
+                            {touched.NoofSlots && errors.NoofSlots && (
+                                <div className="text-red-500 text-sm ">{errors.NoofSlots}</div>
                             )}
 
 
@@ -359,7 +387,8 @@ export function AddSlot() {
 
                 </Card>
 
-            </Dialog>
+            </Dialog >
+            <ToastContainer />
         </>
     );
 }

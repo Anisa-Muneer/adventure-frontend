@@ -20,26 +20,17 @@ import { GenerateError, GenerateSuccess } from "../../toast/GenerateError";
 function Booking() {
   const queryClient = useQueryClient();
   const [selectedDate, setSelectedDate] = useState("");
-  const {
-    isLoading: dateisLoading,
-    error: dateError,
-    data: dateData,
-  } = useQuery({
+  const { isLoading: dateisLoading, error: dateError, data: dateData } = useQuery({
     queryKey: ["slotAdventure"],
     queryFn: () => adventureRequest.get("/slotDate").then((res) => res.data),
   });
 
   const {
-    isLoading: slotDataLoading,
-    error: slotDataError,
-    data: slotData,
-  } = useQuery({
-    queryKey: ["slots", selectedDate],
-    queryFn: () =>
-      adventureRequest
-        .get(`/slots?date=${selectedDate}`)
-        .then((res) => res.data),
-  });
+    isLoading: slotDataLoading, error: slotDataError, data: slotData } = useQuery({
+      queryKey: ["slots", selectedDate],
+      queryFn: () => adventureRequest.get(`/slots?date=${selectedDate}`).then((res) => res.data),
+    });
+
   if (dateisLoading) {
     return (
       <div className="h-screen flex justify-center items-center">
@@ -93,7 +84,7 @@ function Booking() {
     }
   };
 
-  const TABLE_HEAD = ["Category", "Date", "Time", "Status", ""];
+  const TABLE_HEAD = ["Category", "No of Slots", "Date", "Time", "Status", ""];
   return (
     <>
       <ToastContainer />
@@ -186,6 +177,18 @@ function Booking() {
                                                 className="mb-2"
                                               >
                                                 {slot.category}
+                                              </Typography>
+                                            </div>
+                                          </div>
+                                        </td>
+                                        <td>
+                                          <div className="flex items-center mx-7">
+                                            <div>
+                                              <Typography
+                                                color="blue-gray"
+                                                className="mb-2"
+                                              >
+                                                {slot.NoofSlots}
                                               </Typography>
                                             </div>
                                           </div>

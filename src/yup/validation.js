@@ -68,6 +68,7 @@ export const slotSchema = Yup.object().shape({
   endTimeMinute: Yup.string().required("End Time Minute is required"),
   endTimeMeridiem: Yup.string().required("End Time AM/PM is required"),
   category: Yup.string().required("Please select a category"),
+  NoofSlots: Yup.string().required("Please enter no of slots")
 });
 
 export const rejectAdventureSchema = Yup.object({

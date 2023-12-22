@@ -57,12 +57,13 @@ export async function ProfileImage(id, img) {
     }
 }
 
-export const setSlot = (data) => {
+export const setSlot = async (data) => {
     try {
         console.log(data, 'data is found here');
-        const response = adventureRequest.post('/addSlots', data, {
+        const response = await adventureRequest.post('/addSlots', data, {
             withCredentials: true
         })
+        console.log(response, 'kjkjkjkjkjjkkjk')
         return response
     } catch (error) {
         console.log(error.message);

@@ -29,7 +29,8 @@ function Booking() {
     const [booking, setBooking] = useState({
         time: "",
         date: "",
-        fee: null
+        fee: null,
+        NoofSlots: ""
     })
 
 
@@ -90,7 +91,7 @@ function Booking() {
     const handleClick = async (slot) => {
         setSlot(slot)
         setBooking({
-            time: slot.slotTime, date: slot.slotDate, fee: fee
+            time: slot.slotTime, date: slot.slotDate, fee: fee, NoofSlots: slot.NoofSlots
 
         })
         // setIsClicked(slot._id)
@@ -132,7 +133,7 @@ function Booking() {
     };
 
 
-
+    const noOfSlots = slotData.data && slotData.data.length > 0 ? slotData.data[0].NoofSlots : 0;
 
     return (
         <>
@@ -229,9 +230,22 @@ function Booking() {
                                     )}
                                 </Select>
                             </div>
+
+                            <div className="mb-2 mt-4 flex flex-col md:flex-row gap-4">
+                                <Typography variant="h6" color="blue-gray" className="md:-mb-2 md:mt-2 w-full md:w-1/3">
+                                    No of slots
+                                </Typography>
+                                <Select
+                                    size="lg"
+                                    label=''
+                                >
+                                    <Option>No Slots</Option>
+
+
+                                </Select>
+                            </div>
+
                             <div className="flex flex-row mt-7">
-
-
                                 <Typography variant="h6" color="blue-gray" className=" md:mt-3 w-full md:w-1/3">
                                     Select Time
                                 </Typography>
@@ -276,6 +290,7 @@ function Booking() {
                             {/* <div className="flex w-full md:w-max gap-4 mt-8 md:mt-10 mx-auto">
                                 <Button className='w-full md:w-40' type="">Submit</Button>
                             </div> */}
+
                         </form>
 
                     </div>
@@ -302,6 +317,10 @@ function Booking() {
                         <div className="flex flex-row justify-around mt-10 w-full">
                             <div className="mx-14 w-1/2">Time</div>
                             <div className="w-1/2 ">{booking?.time}</div>
+                        </div>
+                        <div className="flex flex-row justify-around mt-10 w-full">
+                            <div className="mx-14 w-1/2">No of Slots</div>
+                            <div className="w-1/2 ">{booking?.NoofSlots}</div>
                         </div>
                         <div className="flex flex-row justify-around mt-10 w-full">
                             <div className="mr-8 mx-14 w-1/2">Price</div>
