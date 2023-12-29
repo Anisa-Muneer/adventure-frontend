@@ -118,7 +118,6 @@ function Booking() {
         const arr = [{ time: slot.slotTime, id: slot._id }];
         const isSeatSelected = selectedSeats.includes(slot._id);
 
-        // Use the callback function in setMultipleData to ensure the correct order of operations
         setMultipleData((current) => {
             const updatedData = isSeatSelected
                 ? current.filter((time) => time.id !== slot._id)

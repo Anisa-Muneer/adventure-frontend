@@ -96,7 +96,7 @@ const MyChats = ({ fetchAgain }) => {
                                 display="flex"
                             >
                                 <Box>
-                                    <img src={chat.users.adventure ? chat.users.adventure.image : dp} className="h-10 w-10 me-3 rounded-full" />
+                                    <img src={chat.users?.adventure ? chat.users.adventure.image : dp} className="h-10 w-10 me-3 rounded-full" />
                                 </Box>
                                 <Box>
                                     <Text>

@@ -23,7 +23,7 @@ export const isLastMessage = (messages, i, userId) => {
     messages[messages.length - 1].sender.adventure &&
       messages[messages.length - 1].sender.adventure._id
       ? messages[messages.length - 1].sender.adventure._id
-      : messages[messages.length - 1].sender.user._id;
+      : messages[messages.length - 1].sender.user?._id;
 
   return i === messages.length - 1 && lastSenderId !== userId && lastSenderId;
 };

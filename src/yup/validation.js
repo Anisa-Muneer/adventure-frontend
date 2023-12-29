@@ -80,7 +80,11 @@ export const adventurePostSchema = Yup.object({
   image: Yup.mixed()
     .test("is-image", "Only image files are allowed", (value) => {
       if (value) {
-        return imageFormats.includes(value.type);
+        for (let i = 0; i < value.length; i++) {
+          if (!imageFormats.includes(value[i].type)) {
+            return false;
+          }
+        }
       }
       return true;
     })

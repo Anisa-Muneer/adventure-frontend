@@ -20,7 +20,6 @@ function Post() {
     queryKey: ["Posts"],
     queryFn: () => adventureRequest.get('/getPosts').then((res) => res.data)
   })
-  console.log(data, 'post data is here');
   if (isLoading) {
     return (
       <div className="h-screen flex justify-center items-center">
@@ -44,7 +43,7 @@ function Post() {
         <AddPosts />
 
         <div className="justify-center align items-center mt-2 overflow-y-scroll h-[40rem]">
-          <ImageList sx={{ width: 1180, height: 550 }} cols={3} row>
+          <ImageList sx={{ width: 1180, height: 520 }} cols={3} row>
             {
               data.data.map((item, ind) => (
                 <ImageListItem key={ind}>
@@ -56,22 +55,21 @@ function Post() {
                       width: '100%', height: 390, objectFit: 'cover'
                     }}
                   /> */}
-                  <Carousel className="rounded-xl">
-                    <img
-                      src="https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2560&q=80"
-                      alt="image 1"
-                      className="h-full w-full object-cover"
-                    />
-                    <img
-                      src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80"
-                      alt="image 2"
-                      className="h-full w-full object-cover"
-                    />
-                    <img
-                      src="https://images.unsplash.com/photo-1518623489648-a173ef7824f3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2762&q=80"
-                      alt="image 3"
-                      className="h-full w-full object-cover"
-                    />
+
+                  <Carousel className="rounded-xl" >
+                    {item.image.map((img, index) => (
+
+                      < img
+                        key={index}
+                        src={img}
+
+
+                        style={{
+                          width: '100%', height: 390, objectFit: 'cover'
+                        }}
+                      />
+
+                    ))}
                   </Carousel>
                   < ImageListItemBar
                     title={item.category}

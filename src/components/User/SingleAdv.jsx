@@ -10,6 +10,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { IconButton, ImageList, ImageListItem, ImageListItemBar, ListSubheader } from '@mui/material';
 import { InfoIcon } from '@chakra-ui/icons';
 import { Button } from '@material-tailwind/react';
+import { Carousel } from "@material-tailwind/react";
 
 
 function SingleAdv() {
@@ -111,18 +112,29 @@ function SingleAdv() {
             <div className="flex justify-center">
               <ThemeProvider theme={theme}>
                 <ImageList sx={{ width: 800, height: 390 }}>
-                  {/* <ImageListItem key="Subheader" cols={3}>
-        <ListSubheader component="div">December</ListSubheader>
-      </ImageListItem> */}
+
                   {postData.data.map((item, indx) => (
                     <ImageListItem key={indx}>
-                      <img
-                        // srcSet={`${item.image} ? w = 248 & fit=crop & auto=format & dpr=2 2x`}
-                        // src={`${item.image} ? w = 248 & fit=crop & auto=format`}
+                      {/* <img
                         src={item.image}
                         alt=''
                         loading="lazy"
-                      />
+                      /> */}
+                      <Carousel className="rounded-xl" >
+                        {item.image.map((img, index) => (
+
+                          < img
+                            key={index}
+                            src={img}
+
+
+                            style={{
+                              width: '100%', height: 390, objectFit: 'cover'
+                            }}
+                          />
+
+                        ))}
+                      </Carousel>
                       <ImageListItemBar
                         title={item.category}
                         subtitle=''

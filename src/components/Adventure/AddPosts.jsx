@@ -10,6 +10,7 @@ import React, { useState } from "react";
 import { adventurePostSchema } from "../../yup/validation";
 import { useFormik } from "formik";
 import { addPosts } from "../../api/adventureApi";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 function AddPosts() {
   const [open, setOpen] = useState(false);
@@ -18,7 +19,7 @@ function AddPosts() {
 
   const initialValues = {
     category: '',
-    image: ''
+    image: []
   }
   const {
     values,
@@ -35,16 +36,19 @@ function AddPosts() {
       setLoading(true)
       const formData = new FormData()
       formData.append("category", values.category)
-      formData.append("image", values.image)
+      for (let i = 0; i < values.image.length; i++) {
+        formData.append("image", values.image[i]);
+      }
       const response = await addPosts(formData)
-      console.log(response.data.data.category, 'it is the response of post');
       if (response) {
         setOpen(!open)
         setLoading(false)
+        queryClient.invalidateQueries(["posts"]);
       }
 
     }
   })
+  const queryClient = useQueryClient()
   const handleOpen = () => {
     setOpen(!open);
   };
@@ -75,7 +79,7 @@ function AddPosts() {
                 value={values.category}
               />
               {touched.category && errors.category && (
-                <div className="text-red-500 text-sm ">{errors.categoryName}</div>
+                <div className="text-red-500 text-sm ">{errors.category}</div>
               )}
             </div>
 
@@ -85,8 +89,9 @@ function AddPosts() {
                 accept="image/*"
                 className=" !border-t-blue-gray-200 text-center focus:!border-t-gray-900"
                 name="image"
+                multiple
                 onChange={(e) => {
-                  const selectedFile = e.currentTarget.files[0];
+                  const selectedFile = e.currentTarget.files;
                   setFieldValue("image", selectedFile);
                 }}
               />
