@@ -63,13 +63,11 @@ function Booking() {
         queryKey: ['slotDate'],
         queryFn: () => userRequest.get(`/slotdate?adventureId=${_id}&categoryName=${categoryName}`).then((res) => res.data),
     });
-    console.log(dateData, 'date dta is here');
     const { isLoading: slotIsLoading, error: slotError, data: slotData } = useQuery({
         queryKey: ['slotUser', selectedDate],
         queryFn: () => userRequest.get(`/slotsuser?date=${selectedDate}&adventureId=${_id}&categoryName=${categoryName}`).then((res) => res.data),
     });
 
-    console.log(slotData, 'slot data is here');
     if (dateIsLoading) {
         return <div className="h-screen flex justify-center items-center"><Spinner color="blue" className="h-10 w-10 " /></div>
     }
@@ -86,38 +84,9 @@ function Booking() {
 
 
 
-    // const handleClick = async (slot) => {
-    //     const arr = [slot.slotTime]
-    //     console.log(arr, 'array')
-    //     setMultipleData((current) => {
-    //         const updatedData = [...current, ...arr];
-    //         console.log(updatedData, 'its a data');
-    //         return updatedData;
-    //     });
-    //     console.log(multipleData, 'its a adta');
-    //     setSlot(slot)
-    //     setBooking({
-
-    //         time: [...multipleData, ...arr],
-    //         date: slot.slotDate,
-    //         fee: fee,
-    //         NoofSlots: slot.NoofSlots,
-    //     });
-    //     // setIsClicked(slot._id)
-    //     const isSeatSelected = selectedSeats.includes(slot._id);
-    //     setSelectedSeats((prevSelectedSeats) => {
-    //         if (isSeatSelected) {
-    //             return prevSelectedSeats.filter((seat) => seat !== slot._id);
-    //         } else {
-    //             return [...prevSelectedSeats, slot._id];
-    //         }
-    //     });
-    // }
-
     const handleClick = (slot) => {
         const arr = [{ time: slot.slotTime, id: slot._id }];
         const isSeatSelected = selectedSeats.includes(slot._id);
-
         setMultipleData((current) => {
             const updatedData = isSeatSelected
                 ? current.filter((time) => time.id !== slot._id)
@@ -125,6 +94,7 @@ function Booking() {
             console.log(updatedData, 'its a data');
             return updatedData;
         });
+
 
         setSlot(slot);
         setBooking({
@@ -138,12 +108,14 @@ function Booking() {
 
         setSelectedSeats((prevSelectedSeats) => {
             if (isSeatSelected) {
-                return prevSelectedSeats.filter((seat) => seat.id !== slot._id);
+                return prevSelectedSeats.filter((seat) => seat !== slot._id);
             } else {
                 return [...prevSelectedSeats, slot._id];
             }
         });
     };
+
+
 
     const totalAmount = booking.fee * selectedSeats.length
     const totalSlots = booking.NoofSlots * selectedSeats.length
