@@ -166,7 +166,7 @@ export function AddSlot() {
                                 className="mb-2 font-medium"
 
                             >
-                                No of Slots
+                                No of Persons
                             </Typography>
 
                             <Input

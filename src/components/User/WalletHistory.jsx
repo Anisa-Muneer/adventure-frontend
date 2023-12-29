@@ -5,10 +5,10 @@ import { BookmarkIcon } from '@heroicons/react/24/solid'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import userRequest from '../../utils/userRequest'
+import AddWallet from './AddWallet'
 
 
 function WalletHistory() {
-  const navigate = useNavigate()
   const location = useLocation()
   const id = location.state
 
@@ -51,10 +51,9 @@ function WalletHistory() {
               </Typography>
             </div>
             <div className="absolute right-0 w-1/2 h-full bg-green-50 rounded-e-xl flex justify-center align items-center">
-              <div className=''>
-                <Button onClick={() => navigate('/adventures')}>Wallet Purchase</Button>
-              </div>
+              <AddWallet id={id} />
             </div>
+
             {/* <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full bg-red-500">
         <img className='rounded-full' src={dp} alt="" />
       </div> */}

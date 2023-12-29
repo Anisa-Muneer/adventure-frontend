@@ -21,18 +21,17 @@ function Booking() {
     const navigate = useNavigate()
     const [selectedDate, setSelectedDate] = useState("")
     const [clientSecret, setClientSecret] = useState("")
-    const [isClicked, setIsClicked] = useState();
     const [selectedSeats, setSelectedSeats] = useState([]);
-    const [clickedSlotId, setClickedSlotId] = useState(null);
     const [paymentMethod, setPaymentMethod] = useState("")
     const [slot, setSlot] = useState("")
+    const [multipleData, setMultipleData] = useState([])
     const [booking, setBooking] = useState({
-        time: "",
+        time: [],
         date: "",
         fee: null,
-        NoofSlots: ""
+        NoofSlots: ''
     })
-
+    console.log(booking, 'its a booking');
 
     const { categoryName, fee, _id } = location.state;
 
@@ -41,7 +40,6 @@ function Booking() {
             const makePayment = async () => {
                 try {
                     const response = await userRequest.get(`/payment/${_id}/${categoryName}`)
-                    console.log(response, 'its a response');
                     setClientSecret(response.data.clientSecret);
                 } catch (error) {
                     console.log(error.message);
@@ -65,15 +63,13 @@ function Booking() {
         queryKey: ['slotDate'],
         queryFn: () => userRequest.get(`/slotdate?adventureId=${_id}&categoryName=${categoryName}`).then((res) => res.data),
     });
-
+    console.log(dateData, 'date dta is here');
     const { isLoading: slotIsLoading, error: slotError, data: slotData } = useQuery({
         queryKey: ['slotUser', selectedDate],
-        queryFn: () => userRequest.get(`/slotsuser?date=${selectedDate}&adventureId=${_id}`).then((res) => res.data),
+        queryFn: () => userRequest.get(`/slotsuser?date=${selectedDate}&adventureId=${_id}&categoryName=${categoryName}`).then((res) => res.data),
     });
 
-    console.log(dateData, 'date data is here');
     console.log(slotData, 'slot data is here');
-
     if (dateIsLoading) {
         return <div className="h-screen flex justify-center items-center"><Spinner color="blue" className="h-10 w-10 " /></div>
     }
@@ -88,23 +84,70 @@ function Booking() {
         return <h1>Something went Wrong</h1>
     }
 
-    const handleClick = async (slot) => {
-        setSlot(slot)
-        setBooking({
-            time: slot.slotTime, date: slot.slotDate, fee: fee, NoofSlots: slot.NoofSlots
 
-        })
-        // setIsClicked(slot._id)
+
+    // const handleClick = async (slot) => {
+    //     const arr = [slot.slotTime]
+    //     console.log(arr, 'array')
+    //     setMultipleData((current) => {
+    //         const updatedData = [...current, ...arr];
+    //         console.log(updatedData, 'its a data');
+    //         return updatedData;
+    //     });
+    //     console.log(multipleData, 'its a adta');
+    //     setSlot(slot)
+    //     setBooking({
+
+    //         time: [...multipleData, ...arr],
+    //         date: slot.slotDate,
+    //         fee: fee,
+    //         NoofSlots: slot.NoofSlots,
+    //     });
+    //     // setIsClicked(slot._id)
+    //     const isSeatSelected = selectedSeats.includes(slot._id);
+    //     setSelectedSeats((prevSelectedSeats) => {
+    //         if (isSeatSelected) {
+    //             return prevSelectedSeats.filter((seat) => seat !== slot._id);
+    //         } else {
+    //             return [...prevSelectedSeats, slot._id];
+    //         }
+    //     });
+    // }
+
+    const handleClick = (slot) => {
+        const arr = [{ time: slot.slotTime, id: slot._id }];
         const isSeatSelected = selectedSeats.includes(slot._id);
+
+        // Use the callback function in setMultipleData to ensure the correct order of operations
+        setMultipleData((current) => {
+            const updatedData = isSeatSelected
+                ? current.filter((time) => time.id !== slot._id)
+                : [...current, ...arr];
+            console.log(updatedData, 'its a data');
+            return updatedData;
+        });
+
+        setSlot(slot);
+        setBooking({
+            time: isSeatSelected
+                ? multipleData.filter((time) => time.id !== slot._id)
+                : [...multipleData, ...arr],
+            date: slot.slotDate,
+            fee: fee,
+            NoofSlots: slot.NoofSlots,
+        });
+
         setSelectedSeats((prevSelectedSeats) => {
             if (isSeatSelected) {
-                return prevSelectedSeats.filter((seat) => seat !== slot._id);
+                return prevSelectedSeats.filter((seat) => seat.id !== slot._id);
             } else {
                 return [...prevSelectedSeats, slot._id];
             }
         });
-    }
-    const totalAmount = booking.fee * selectedSeats.length;
+    };
+
+    const totalAmount = booking.fee * selectedSeats.length
+    const totalSlots = booking.NoofSlots * selectedSeats.length
 
     const handlePayment = async (e) => {
         setPaymentMethod(e.target.value)
@@ -114,7 +157,8 @@ function Booking() {
 
     const handleWalletPayment = async (bookdata) => {
         try {
-            const response = await walletPayment({ bookdata })
+            console.log(bookdata, 'bookdata')
+            const response = await walletPayment({ bookdata, booking })
             if (response.data.status) {
 
                 navigate("/success")
@@ -127,13 +171,7 @@ function Booking() {
     }
 
 
-    const iconStyles = {
-        color: clickedSlotId === slot._id ? 'blue' : 'black',
 
-    };
-
-
-    const noOfSlots = slotData.data && slotData.data.length > 0 ? slotData.data[0].NoofSlots : 0;
 
     return (
         <>
@@ -191,8 +229,8 @@ function Booking() {
                         </div>
 
                     </Card>
-                    <div className='md:h-96 m-4 md:my-9 py-7 mx-10'>
-                        <div className='mx-4'>
+                    <div className='md:h-96 w-2/3 m-4 md:my-9 py-7 mx-10'>
+                        <div className='mx-4 w-2/3'>
 
                             <Typography
                                 variant="h3"
@@ -208,7 +246,7 @@ function Booking() {
 
 
                             <div className="mb-2 mt-4 flex flex-col md:flex-row gap-4">
-                                <Typography variant="h6" color="blue-gray" className="md:-mb-2 md:mt-2 w-full md:w-1/3">
+                                <Typography variant="h6" color="blue-gray" className="md:-mb-2 md:mt-2 w-full md:w-2/3">
                                     Date
                                 </Typography>
                                 <Select
@@ -232,21 +270,20 @@ function Booking() {
                             </div>
 
                             <div className="mb-2 mt-4 flex flex-col md:flex-row gap-4">
-                                <Typography variant="h6" color="blue-gray" className="md:-mb-2 md:mt-2 w-full md:w-1/3">
-                                    No of slots
+                                <Typography variant="h6" color="blue-gray" className="md:-mb-2 md:mt-2 w-full md:w-2/3">
+                                    No of Persons @ a time
                                 </Typography>
-                                <Select
-                                    size="lg"
-                                    label=''
-                                >
-                                    <Option>No Slots</Option>
-
-
-                                </Select>
+                                <Input
+                                    type="number"
+                                    name="NoofMemb"
+                                    // onChange={(e) => setBooking({ ...booking, [e.target.name]: e.target.value })}
+                                    // value={slot.NoofSlots}
+                                    className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                                />
                             </div>
 
                             <div className="flex flex-row mt-7">
-                                <Typography variant="h6" color="blue-gray" className=" md:mt-3 w-full md:w-1/3">
+                                <Typography variant="h6" color="blue-gray" className=" md:mt-3 w-full md:w-2/3">
                                     Select Time
                                 </Typography>
                                 <div className="flex flex-row">
@@ -286,11 +323,6 @@ function Booking() {
 
                             </div>
 
-
-                            {/* <div className="flex w-full md:w-max gap-4 mt-8 md:mt-10 mx-auto">
-                                <Button className='w-full md:w-40' type="">Submit</Button>
-                            </div> */}
-
                         </form>
 
                     </div>
@@ -314,13 +346,13 @@ function Booking() {
                             <div className="mr-14 mx-14 w-1/2">Date</div>
                             <div className="w-1/2">{booking?.date ? new Date(booking.date).toLocaleDateString('en-GB') : ''}</div>
                         </div>
-                        <div className="flex flex-row justify-around mt-10 w-full">
+                        {/* <div className="flex flex-row justify-around mt-10 w-full">
                             <div className="mx-14 w-1/2">Time</div>
                             <div className="w-1/2 ">{booking?.time}</div>
-                        </div>
+                        </div> */}
                         <div className="flex flex-row justify-around mt-10 w-full">
-                            <div className="mx-14 w-1/2">No of Slots</div>
-                            <div className="w-1/2 ">{booking?.NoofSlots}</div>
+                            <div className="mx-14 w-1/2">No of Persons</div>
+                            <div className="w-1/2 ">{totalSlots}</div>
                         </div>
                         <div className="flex flex-row justify-around mt-10 w-full">
                             <div className="mr-8 mx-14 w-1/2">Price</div>
@@ -373,11 +405,11 @@ function Booking() {
 
                         {slot && slot.isBooked === false ? (clientSecret && paymentMethod === "onlinePayment" ? (
                             <Elements options={options} stripe={stripePromise}>
-                                <Payment Secret={clientSecret} advId={_id} slotId={slot._id} slotDate={slot.slotDate} slotTime={slot.slotTime} fee={totalAmount} categoryName={categoryName} />
+                                <Payment Secret={clientSecret} advId={_id} slotId={slot._id} slotDate={slot.slotDate} booking={booking} categoryName={categoryName} />
                             </Elements>
                         ) : paymentMethod === "walletPayment" ? (
                             <div className="flex flex-row justify-center mt-10" >
-                                <Button onClick={() => handleWalletPayment({ advId: _id, slotId: slot._id, slotDate: slot.slotDate, slotTime: slot.slotTime, totalAmount, categoryName })} className="rounded-3xl w-72">Book Now</Button>
+                                <Button onClick={() => handleWalletPayment({ advId: _id, totalAmount, categoryName })} className="rounded-3xl w-72">Book Now</Button>
                             </div>
                         ) : (
                             ""

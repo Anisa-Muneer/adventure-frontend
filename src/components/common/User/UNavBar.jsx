@@ -40,7 +40,7 @@ const profileMenuItems = [
 
 function ProfileMenu() {
     const { userInfo } = useSelector(state => state.user)
-    console.log(userInfo,'userInfo is here');
+    console.log(userInfo, 'userInfo is here');
     const id = userInfo.id
     const navigate = useNavigate()
     const handleLogout = () => {
@@ -247,7 +247,7 @@ function UNavBar() {
                     <Typography
                         as="a"
                         href="#"
-                        className="mr-4 ml-2 cursor-pointer py-1.5 font-medium" onClick={handleLogout}
+                        className="mr-4 ml-2 cursor-pointer py-1.5 font-medium" onClick={() => navigate('/')}
                     >
                         Adventure.
                     </Typography>
@@ -266,7 +266,7 @@ function UNavBar() {
                     </IconButton>
                     <div className="text-gray-600">
 
-                        <BsChatLeftFill onClick={()=>navigate('/chats')}/>
+                        <BsChatLeftFill onClick={() => navigate('/chats')} />
                     </div>
 
                     <ProfileMenu />
@@ -277,7 +277,7 @@ function UNavBar() {
             </Navbar>
         </div>
 
-        
+
 
 
 

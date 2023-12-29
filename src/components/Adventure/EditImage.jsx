@@ -51,6 +51,7 @@ function EditImage({ refetch }) {
                     name: response.data.data.name,
                     email: response.data.data.email,
                 }
+                console.log(response.data, 'its an adventure details');
                 dispatch(setadventuredetails({ adventureInfo: adventureDetails }))
 
                 handleOpen();

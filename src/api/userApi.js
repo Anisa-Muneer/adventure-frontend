@@ -47,9 +47,9 @@ export async function UpdateImage(id, img) {
 }
 
 
-export const cancelBooking = async ({ id }) => {
+export const cancelBooking = async ({ id, slotId }) => {
   try {
-    const response = await userRequest.put('/cancelBooking', { id })
+    const response = await userRequest.put('/cancelBooking', { id, slotId })
     return response
   } catch (error) {
     console.log(error.mesage);
@@ -76,12 +76,12 @@ export const getReview = async (id) => {
 }
 
 
-export async function walletPayment(bookingId) {
+export async function walletPayment(bookingId, booking) {
   try {
-    const data = await userRequest.post('/walletPayment', { bookingId })
+    const data = await userRequest.post('/walletPayment', { bookingId, booking })
     return data
   } catch (error) {
     console.log(error.mesage);
-    throw error; 
+    throw error;
   }
 }

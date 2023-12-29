@@ -6,7 +6,8 @@ import userRequest from '../../utils/userRequest';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 
-function Payment({ secret, advId, slotId, slotDate, slotTime, fee, categoryName }) {
+function Payment({ secret, advId, slotId, slotDate, booking, categoryName }) {
+    console.log(booking, 'payment booking is here');
     const navigate = useNavigate()
     const [open, setOpen] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
@@ -14,36 +15,32 @@ function Payment({ secret, advId, slotId, slotDate, slotTime, fee, categoryName 
     const stripe = useStripe()
     const elements = useElements()
 
-    const handleSubmit = async(e)=>{
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        if(!stripe || !elements){
+        if (!stripe || !elements) {
             return
         }
         setIsLoading(true)
-        const {error, paymentIntent} = await stripe.confirmPayment({
+        const { error, paymentIntent } = await stripe.confirmPayment({
             elements,
-            confirmParams :{
-
-            },
-            redirect : 'if_required'
+            confirmParams: {},
+            redirect: 'if_required'
         })
-        if(paymentIntent){
+        if (paymentIntent) {
             let bookdata = {
                 advId,
-                entryFee:fee,
+                booking,
+                slotDate,
                 categoryName,
                 slotId,
-                slotTime,
-                slotDate,
-                status : 'completed'
+                status: 'completed'
             }
-            const response = await userRequest.post('/paymentSuccess',{bookdata})
-
-            if(response.data.success){
+            const response = await userRequest.post('/paymentSuccess', { bookdata })
+            if (response.data.success) {
                 navigate('/success')
             }
         }
-        console.log(bookdata,'bookdata is here');
+        console.log(bookdata, 'bookdata is here');
         if (error.type === "card_error" || error.type === "validation_error") {
             setMessage(error.message);
         } else {
@@ -57,7 +54,7 @@ function Payment({ secret, advId, slotId, slotDate, slotTime, fee, categoryName 
     const paymentElementOptions = {
         layout: "tabs",
     };
-    
+
     const handleOpen = () => {
         setOpen(!open)
     }
@@ -87,13 +84,13 @@ function Payment({ secret, advId, slotId, slotDate, slotTime, fee, categoryName 
                     <CardBody>
                         <div className="flex justify-between">
                             <Typography>Entry Fee</Typography>
-                            <Typography>₹ {fee} </Typography>
+                            <Typography>₹ {booking.fee} </Typography>
                         </div>
                         <Tabs value="card" className="overflow-visible">
                             <TabsHeader className="relative z-0 ">
                             </TabsHeader>
                             <TabsBody
-                                className="!overflow-x-hidden !overflow-y-visible"
+                                className="!overflow-x-hidden !erroroverflow-y-visible"
                             >
                                 <TabPanel value="card" className="p-0">
                                     <main className="flex-grow flex items-center justify-center shadow-none">
@@ -102,7 +99,7 @@ function Payment({ secret, advId, slotId, slotDate, slotTime, fee, categoryName 
                                             onSubmit={handleSubmit}
                                             className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md mx-auto"
                                         >
-                                             <LinkAuthenticationElement
+                                            <LinkAuthenticationElement
                                                 id="link-authentication-element"
                                                 // onChange={(e) => setEmail(e.target.value)}
                                                 class="w-full p-3 border rounded mb-4 focus:outline-none focus:ring focus:ring-blue-300"
@@ -114,12 +111,12 @@ function Payment({ secret, advId, slotId, slotDate, slotTime, fee, categoryName 
                                             />
 
                                             <button
-                                                 disabled={isLoading ||!stripe || !elements}
+                                                disabled={isLoading || !stripe || !elements}
                                                 id="submit"
                                                 className="w-full bg-gradient-to-r from-teal-400 to-blue-500 text-white py-3 my-1 rounded-md shadow-md hover:from-teal-500 hover:to-blue-600 focus:outline-none focus:ring focus:ring-teal-300"
                                             >
-                                                 <span id="button-text">
-                                                        "Pay now"
+                                                <span id="button-text">
+                                                    "Pay now"
                                                 </span>
                                             </button>
                                             {/* {message && (

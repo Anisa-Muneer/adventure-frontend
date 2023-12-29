@@ -1,5 +1,5 @@
 import React from "react";
-
+import { Carousel } from "@material-tailwind/react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import {
   IconButton,
@@ -31,79 +31,6 @@ function Post() {
   if (error) {
     return <h1>Something went wrong</h1>;
   }
-  const itemData = [
-    {
-      img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
-      title: "Breakfast",
-      author: "@bkristastucchio",
-      rows: 2,
-      cols: 3,
-      featured: true,
-    },
-    {
-      img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
-      title: "Burger",
-      author: "@rollelflex_graphy726",
-    },
-    {
-      img: "https://images.unsplash.com/photo-1522770179533-24471fcdba45",
-      title: "Camera",
-      author: "@helloimnik",
-    },
-    {
-      img: "https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c",
-      title: "Coffee",
-      author: "@nolanissac",
-      cols: 2,
-    },
-    {
-      img: "https://images.unsplash.com/photo-1533827432537-70133748f5c8",
-      title: "Hats",
-      author: "@hjrc33",
-      cols: 2,
-    },
-    {
-      img: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62",
-      title: "Honey",
-      author: "@arwinneil",
-      rows: 2,
-      cols: 2,
-      featured: true,
-    },
-    {
-      img: "https://images.unsplash.com/photo-1516802273409-68526ee1bdd6",
-      title: "Basketball",
-      author: "@tjdragotta",
-    },
-    {
-      img: "https://images.unsplash.com/photo-1518756131217-31eb79b20e8f",
-      title: "Fern",
-      author: "@katie_wasserman",
-    },
-    {
-      img: "https://images.unsplash.com/photo-1597645587822-e99fa5d45d25",
-      title: "Mushrooms",
-      author: "@silverdalex",
-      rows: 2,
-      cols: 2,
-    },
-    {
-      img: "https://images.unsplash.com/photo-1567306301408-9b74779a11af",
-      title: "Tomato basil",
-      author: "@shelleypauls",
-    },
-    {
-      img: "https://images.unsplash.com/photo-1471357674240-e1a485acb3e1",
-      title: "Sea star",
-      author: "@peterlaster",
-    },
-    {
-      img: "https://images.unsplash.com/photo-1589118949245-7d38baf380d6",
-      title: "Bike",
-      author: "@southside_customs",
-      cols: 2,
-    },
-  ];
 
   const theme = createTheme({
     typography: {
@@ -117,19 +44,35 @@ function Post() {
         <AddPosts />
 
         <div className="justify-center align items-center mt-2 overflow-y-scroll h-[40rem]">
-          <ImageList sx={{ width: 1180, height: 1180 }} cols={3} row>
+          <ImageList sx={{ width: 1180, height: 550 }} cols={3} row>
             {
               data.data.map((item, ind) => (
                 <ImageListItem key={ind}>
-                  <img
-                    srcSet={`${item.image}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                    src={`${item.image}?w=248&fit=crop&auto=format`}
+                  {/* <img
+                    src={item.image}
                     alt=''
                     loading="lazy"
                     style={{
-                      width: '100%', height: 250, objectFit: 'cover'
+                      width: '100%', height: 390, objectFit: 'cover'
                     }}
-                  />
+                  /> */}
+                  <Carousel className="rounded-xl">
+                    <img
+                      src="https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2560&q=80"
+                      alt="image 1"
+                      className="h-full w-full object-cover"
+                    />
+                    <img
+                      src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80"
+                      alt="image 2"
+                      className="h-full w-full object-cover"
+                    />
+                    <img
+                      src="https://images.unsplash.com/photo-1518623489648-a173ef7824f3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2762&q=80"
+                      alt="image 3"
+                      className="h-full w-full object-cover"
+                    />
+                  </Carousel>
                   < ImageListItemBar
                     title={item.category}
                     subtitle=''

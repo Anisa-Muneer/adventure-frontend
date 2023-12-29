@@ -25,7 +25,7 @@ function Login() {
   const initialValues = {
     email: '',
     password: '',
-    image  : ""
+    image: ""
 
   }
 
@@ -46,7 +46,8 @@ function Login() {
         const adventureDetails = {
           id: response.data.adventure._id,
           name: response.data.adventure.name,
-          email: response.data.adventure.email
+          email: response.data.adventure.email,
+          image: response.data.adventure.image ? response.data.adventure.image : ""
         }
         localStorage.setItem('currentAdventure', response.data.token)
         dispatch(setadventuredetails({ adventureInfo: adventureDetails }))

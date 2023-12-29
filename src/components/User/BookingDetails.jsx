@@ -6,24 +6,24 @@ import CancelBooking from './CancelBooking'
 
 function BookingDetails() {
 
-    const{isLoading, error, data} = useQuery({
-        queryKey : ['bookingDetails'],
-        queryFn : () => userRequest.get('/bookingDetails').then((res)=>res.data)
+    const { isLoading, error, data } = useQuery({
+        queryKey: ['bookingDetails'],
+        queryFn: () => userRequest.get('/bookingDetails').then((res) => res.data)
     })
 
-    
-  if (isLoading) {
-    return <div className="h-screen flex justify-center items-center"><Spinner color="blue" className="h-10 w-10 " /></div>
-  }
 
-  if (error) {
-    return <h1>Something went wrong</h1>
-  }
-  console.log(data,'llllllllllllllllllllllllll');
+    if (isLoading) {
+        return <div className="h-screen flex justify-center items-center"><Spinner color="blue" className="h-10 w-10 " /></div>
+    }
+
+    if (error) {
+        return <h1>Something went wrong</h1>
+    }
+    console.log(data, 'llllllllllllllllllllllllll');
 
 
-  return (
-    <div className="container mx-auto">
+    return (
+        <div className="container mx-auto">
             <Card className='bg-gray-300 w-full my-2 p-3 shadow-none' >
                 <Typography variant="h3">Bookings</Typography>
             </Card>
@@ -37,44 +37,56 @@ function BookingDetails() {
                             >
                                 <img
                                     size="lg"
-                                  src={booking.image}
+                                    src={booking.image}
                                     className="h-16 w-16 md:h-28 md:w-28 rounded-full"
                                 />
                             </div>
                         </div>
                         <div className=" ">
                             <Typography variant="h3" className="my-2">
-                             {booking.adventureId.name}
+                                {booking.adventureId.name}
                             </Typography>
                             <Typography variant="h6" className="my-2">
-                                location @ {booking.adventureId.location}
+                                Location: {booking.adventureId.location}
                             </Typography>
                             <div className="flex my-2">
                                 <Typography>
-                                    {booking.categoryName}
+                                    Category: {booking.categoryName}
                                 </Typography>
                             </div>
                             <div className="flex my-2">
                                 <Typography>
-                                    {booking.entryFee}
+                                    Fee: {booking.entryFee}
                                 </Typography>
                             </div>
-                             <div className="flex flex-row my-2">
+                            <div className="flex flex-row my-2">
                                 <Typography>
-                                    {new Date(booking.scheduledAt?.slotDate).toLocaleDateString('en-GB')} @
+                                    Date: {new Date(booking.bookingDate
+                                    ).toLocaleDateString('en-GB')}
                                 </Typography>
-                                <Typography>
-                                    {booking.scheduledAt?.slotTime}
-                                </Typography>
+
                             </div>
+                            {booking.scheduledAt.map((tim, ind) => (
+                                <div className="flex flex-row gap-5 pb-2 items-center my-2" key={ind}>
+
+                                    < Typography > {tim.time}
+
+
+                                    </Typography>
+                                    {tim.isBooked ?
+                                        <CancelBooking id={booking._id} slotId={tim.slotId} isCompleted={booking.status} />
+                                        : <p>Cancelled</p>
+                                    }
+                                </div>
+                            ))}
                         </div>
-                       <CancelBooking id={booking._id} isCompleted={booking.status}/>
                     </div>
                 </Card>
-            ))}
-           
-        </div>
-  )
+            ))
+            }
+
+        </div >
+    )
 }
 
 export default BookingDetails

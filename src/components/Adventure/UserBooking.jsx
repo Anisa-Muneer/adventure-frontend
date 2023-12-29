@@ -72,7 +72,7 @@ function UserBooking() {
 
 
 
-                                                        <tr key={index}>
+                                                        <tr key={index} >
                                                             <td>
                                                                 <div className="flex items-center mx-7" >
                                                                     <div>
@@ -88,7 +88,7 @@ function UserBooking() {
                                                                 <div className="flex items-center mx-7">
                                                                     <div>
                                                                         <Typography color="blue-gray" className="mb-2">
-                                                                            {booking.userId.name}
+                                                                            {booking.user.name}
                                                                         </Typography>
                                                                     </div>
                                                                 </div>
@@ -97,18 +97,7 @@ function UserBooking() {
                                                                 <div className="flex items-center mx-7">
                                                                     <div>
                                                                         <Typography color="blue-gray" className="mb-2">
-                                                                            8
-                                                                        </Typography>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-
-                                                            <td>
-                                                                <div className="flex items-center mx-7">
-                                                                    <div>
-                                                                        <Typography color="blue-gray" className="mb-2">
-                                                                            {new Date(booking.scheduledAt.slotDate).toLocaleDateString('en-GB')}
-
+                                                                            {booking.noOfSlots}
                                                                         </Typography>
                                                                     </div>
                                                                 </div>
@@ -118,8 +107,22 @@ function UserBooking() {
                                                                 <div className="flex items-center mx-7">
                                                                     <div>
                                                                         <Typography color="blue-gray" className="mb-2">
-                                                                            {booking.scheduledAt.slotTime}
+                                                                            {new Date(booking.bookingDate).toLocaleDateString('en-GB')}
+
                                                                         </Typography>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+
+                                                            <td>
+                                                                <div className="flex items-center mx-7">
+                                                                    <div>
+
+
+                                                                        <Typography color="blue-gray" className="mb-2" >
+                                                                            {booking.scheduledAt.time}
+                                                                        </Typography>
+
 
                                                                     </div>
                                                                 </div>

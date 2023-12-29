@@ -11,14 +11,14 @@ import { ToastContainer } from "react-toastify";
 import { GenerateError, GenerateSuccess } from "../../toast/GenerateError";
 import { cancelBooking } from "../../api/userApi";
 
-function CancelBooking({ id ,isCompleted}) {
+function CancelBooking({ id, slotId, isCompleted }) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(!open);
 
   const queryClient = useQueryClient();
 
   const handleCancel = async () => {
-    const response = await cancelBooking({ id });
+    const response = await cancelBooking({ id, slotId });
     console.log(response);
     if (response.data.updated) {
       GenerateSuccess(response.data.message);
@@ -31,15 +31,11 @@ function CancelBooking({ id ,isCompleted}) {
   };
   return (
     <>
-    {isCompleted==='notCompleted' ? (
+
       <div className="flex-col ">
         <Button onClick={handleOpen}>Cancel</Button>
       </div>
-      ):(
-        <div className="flex-col ">
-        <Button className="bg-red-500">Canceled</Button>
-      </div>
-      )}
+
       <Dialog open={open} handler={handleOpen} size="xs">
         <DialogBody className="flex flex-col justify-center items-center">
           <Typography variant="h5"> Are You Sure </Typography>
