@@ -135,3 +135,12 @@ export async function deletePost(id) {
     console.log(id, 'id is here');
     return adventureRequest.post('/deletePost', id);
 }
+
+export async function DashboardData() {
+    try {
+        const data = await adventureRequest.get('/dashboard')
+        return data
+    } catch (error) {
+        console.log(err);
+    }
+}

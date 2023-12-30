@@ -1,7 +1,7 @@
 export const isSameSenderMargin = (messages, m, i, userId) => {
   const currentSenderId =
-    (m.sender.adventure && m.sender.adventure._id) || // Check sender.adventure
-    (m.sender.user && m.sender?.user._id); // Check sender.user
+    (m.sender.adventure && m.sender.adventure._id) ||
+    (m.sender.user && m.sender?.user._id);
 
   if (
     i < messages.length - 1 &&

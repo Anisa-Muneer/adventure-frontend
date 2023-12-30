@@ -27,7 +27,7 @@ export function AdventureSidebar() {
           </Typography>
         </div> */}
       <List className="text-white">
-        <ListItem>
+        <ListItem onClick={() => navigate('/adventure')}>
           <ListItemPrefix>
             <PresentationChartBarIcon className="h-5 w-5" />
           </ListItemPrefix>

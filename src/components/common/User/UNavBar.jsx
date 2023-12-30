@@ -20,10 +20,12 @@ import {
     PowerIcon,
     RocketLaunchIcon,
     Bars2Icon,
+    BellIcon,
 } from "@heroicons/react/24/solid";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Logoutdetails } from "../../../Redux/UserSlice";
+import { ChatState } from "../../User/Chat/components/Context/ChatProvider";
 
 
 // profile menu component
@@ -39,6 +41,7 @@ const profileMenuItems = [
 ];
 
 function ProfileMenu() {
+
     const { userInfo } = useSelector(state => state.user)
     console.log(userInfo, 'userInfo is here');
     const id = userInfo.id
@@ -218,6 +221,7 @@ function NavList() {
 }
 
 function UNavBar() {
+    const { notification, setNotification } = ChatState();
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const handleLogout = async () => {
@@ -265,17 +269,31 @@ function UNavBar() {
                         <Bars2Icon className="h-6 w-6" />
                     </IconButton>
                     <div className="text-gray-600">
-
                         <BsChatLeftFill onClick={() => navigate('/chats')} />
                     </div>
 
+                    <Menu className="ml-auto flex gap-1 md:mr-4 ">
+                        <IconButton variant="text">
+                            <BellIcon className="h-6 w-6 text-gray-600" />
+                        </IconButton>
+                        <MenuList className="text-gray-600">
+                            {!notification.length && "No new Message"}
+                            {notification.map(notif => (
+                                <MenuItem key={notif._id}>
+
+
+                                </MenuItem>
+                            ))}
+                        </MenuList>
+                    </Menu>
+
                     <ProfileMenu />
-                </div>
+                </div >
                 <MobileNav open={isNavOpen} className="overflow-scroll">
                     <NavList />
                 </MobileNav>
-            </Navbar>
-        </div>
+            </Navbar >
+        </div >
 
 
 

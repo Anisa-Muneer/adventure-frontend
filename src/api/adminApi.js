@@ -28,3 +28,12 @@ export const rejectAdventure = async (data, id) => {
         withCredentials: true
     })
 }
+
+export async function adminDashboardData() {
+    try {
+        const data = await adminRequest.get('/dashboard')
+        return data
+    } catch (error) {
+        console.log(err);
+    }
+}

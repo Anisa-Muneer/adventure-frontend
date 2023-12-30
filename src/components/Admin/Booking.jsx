@@ -23,17 +23,17 @@ import adminRequest from "../../utils/adminRequest";
 
 
 
-const TABLE_HEAD = ["Adventure Team", "Category", "User Name", "Date","Action"];
+const TABLE_HEAD = ["Adventure Team", "Category", "User Name", "Date"];
 
 
 
 export function Booking() {
- 
+
   const { isLoading, error, data } = useQuery({
     queryKey: ['adminBooking'],
     queryFn: () => adminRequest.get('/booking').then((res) => res.data)
   })
-  console.log(data,'data is loading');
+  console.log(data, 'data is loading');
 
   if (isLoading) {
     return <div className="h-screen flex justify-center items-center"><Spinner color="blue" className="h-10 w-10 " /></div>
@@ -43,7 +43,7 @@ export function Booking() {
     return <h1>Something went wrong</h1>
   }
 
-  
+
   return (
     <Card className="h-full w-full">
       <CardHeader floated={false} shadow={false} className="rounded-none">
@@ -56,7 +56,7 @@ export function Booking() {
               See information about all adventure team
             </Typography>
           </div>
-         
+
         </div>
         <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
           <Tabs value="all" className="w-full md:w-96 rounded-lg">
@@ -96,84 +96,84 @@ export function Booking() {
             </tr>
           </thead>
           <tbody>
-               {data.data.map((booking, index) => {
+            {data.data.map((booking, index) => {
 
-              
-                const isLast = index === data.data - 1;
-                const classes = isLast
-                  ? "p-4"
-                  : "p-4 border-b border-blue-gray-50";
 
-                return (
-          
-                  <tr >
-                    <td class={classes}>
-                      <div className="flex items-center gap-9 ">
-                        <div className="flex flex-col">
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal"
-                          >
-                             {booking.adventureId.name}
-                          </Typography>
-                       
-                        </div>
-                      </div>
-                    </td>
-                    <td class={classes} >
-                      <div className="w-max">
-                     <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal leading-none opacity-100 mx-4"
-                  >
-                  {booking.categoryName}
-                  </Typography>
-                      </div>
-                    </td>
-                    <td class={classes}>
-                      <div className="w-max">
-                      <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal leading-none opacity-100 mx-4"
-                  >
-                   {booking.userId.name}
-                  </Typography>
-                      </div>
-                    </td>
-                  
-                   
-                      <td class={classes}>
-                        <div className="w-max">
-                      <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal leading-none opacity-100 mx-4"
-                  >
-                  {new Date(booking.scheduledAt.slotDate).toLocaleDateString('en-GB')}
-                  </Typography>
-                      </div>
-                      </td>
+              const isLast = index === data.data - 1;
+              const classes = isLast
+                ? "p-4"
+                : "p-4 border-b border-blue-gray-50";
 
-                         <td class={classes}>
-                        <div className="w-max">
-                      <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal leading-none opacity-100 mx-4"
-                  >
-                  
-                  </Typography>
+              return (
+
+                <tr >
+                  <td class={classes}>
+                    <div className="flex items-center gap-9 ">
+                      <div className="flex flex-col">
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {booking.adventureId.name}
+                        </Typography>
+
                       </div>
-                      </td>
-                 
-                  </tr>
-                  )
-               
-             },
-            )}  
+                    </div>
+                  </td>
+                  <td class={classes} >
+                    <div className="w-max">
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal leading-none opacity-100 mx-4"
+                      >
+                        {booking.categoryName}
+                      </Typography>
+                    </div>
+                  </td>
+                  <td class={classes}>
+                    <div className="w-max">
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal leading-none opacity-100 mx-4"
+                      >
+                        {booking.user.name}
+                      </Typography>
+                    </div>
+                  </td>
+
+
+                  <td class={classes}>
+                    <div className="w-max">
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal leading-none opacity-100 mx-4"
+                      >
+                        {new Date(booking.bookingDate).toLocaleDateString('en-GB')}
+                      </Typography>
+                    </div>
+                  </td>
+
+                  {/* <td class={classes}>
+                    <div className="w-max">
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal leading-none opacity-100 mx-4"
+                      >
+
+                      </Typography>
+                    </div>
+                  </td> */}
+
+                </tr>
+              )
+
+            },
+            )}
           </tbody>
         </table>
       </CardBody>
