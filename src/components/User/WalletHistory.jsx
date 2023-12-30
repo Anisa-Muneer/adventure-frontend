@@ -77,7 +77,7 @@ function WalletHistory() {
 
 
         <div className='w-3/4  h-auto mx-48 mt-5'>
-          {data ? data.data.map((booking, index) => (
+          {data && data.data.map((booking, index) => (
 
             <CardBody className="h-40 m-3  py-2 bg-blue-gray-50 rounded-lg" key={index} >
 
@@ -155,13 +155,7 @@ function WalletHistory() {
 
 
             </CardBody>
-          )) : (
-            <div>
-              <Typography>
-                Wallet history empty
-              </Typography>
-            </div>
-          )}
+          ))}
 
         </div>
 
