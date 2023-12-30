@@ -114,14 +114,14 @@ function WalletHistory() {
                       color="blue-gray"
                       size="sm"
                       className="font-normal"
-                    >{new Date(booking.scheduledAt.slotDate).toLocaleDateString('en-GB')}
+                    >{new Date(booking.bookingDate).toLocaleDateString('en-GB')}
                     </Typography>
                     <Typography
 
                       color="blue-gray"
                       size="sm"
                       className="font-normal"
-                    > @ {booking.scheduledAt.slotTime}
+                    >  {booking.scheduledAt.time}
                     </Typography>
                   </div>
 
@@ -146,8 +146,8 @@ function WalletHistory() {
                   <Chip
                     variant="ghost"
                     size="sm"
-                    value={booking.status === 'cancelled' ? `+ ${booking.entryFee}` : `-${booking.entryFee}`}
-                    color={booking.status === 'cancelled' ? "green" : "red"}
+                    value={booking.status === 'cancel' ? `+ ${booking.entryFee}` : `-${booking.entryFee}`}
+                    color={booking.status === 'cancel' ? "green" : "red"}
                   />
                 </div>
               </div>

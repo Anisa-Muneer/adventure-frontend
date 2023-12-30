@@ -1,4 +1,4 @@
-import { Button, Card, Chip, Spinner, Typography } from '@material-tailwind/react'
+import { Button, Card, CardBody, Chip, Spinner, Typography } from '@material-tailwind/react'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import userRequest from '../../utils/userRequest'
@@ -20,6 +20,8 @@ function BookingDetails() {
         return <h1>Something went wrong</h1>
     }
     console.log(data, 'llllllllllllllllllllllllll');
+
+    const TABLE_HEAD = ["Name", "Status", "Actions"];
 
 
     return (
@@ -81,6 +83,8 @@ function BookingDetails() {
                             ))}
                         </div>
                     </div>
+
+
                 </Card>
             ))
             }
